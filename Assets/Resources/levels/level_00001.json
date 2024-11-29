@@ -1,0 +1,22 @@
+{
+    "level": 1,
+    "coloredBottleCount": 2,
+    "emptyBottleCount": 0,
+    "bottleVolume": 4,
+    "bottleList": [
+        [
+            "pink"
+        ],
+        [
+            "pink",
+            "pink",
+            "pink"
+        ]
+    ],
+    "solution": [
+        [
+            0,
+            1
+        ]
+    ]
+}
