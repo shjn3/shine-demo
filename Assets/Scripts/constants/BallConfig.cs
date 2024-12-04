@@ -1,6 +1,7 @@
 
 public class BallConfig
 {
+    public const float HEIGHT = 42;
     public class Colours
     {
         public const string LIME = "lime";

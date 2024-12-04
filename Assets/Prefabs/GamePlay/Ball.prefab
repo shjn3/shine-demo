@@ -97,3 +97,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cfc12330c5f02342826da2f55de642b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1051839418905307440}
+  sprites:
+  - {fileID: 21300000, guid: 038039351f03fd545b513bcf2e777a3e, type: 3}
+  - {fileID: 21300000, guid: 82c721258c8a6ae4d96875fec42b6509, type: 3}
+  - {fileID: 21300000, guid: 00b99eb187cf5a244a5052710d9961a2, type: 3}
+  - {fileID: 21300000, guid: 384b8701f91fc9641ac64f02dff4a614, type: 3}
+  - {fileID: 21300000, guid: 4f26928d1979b6e4da40df3b87733684, type: 3}
+  - {fileID: 21300000, guid: 3d172b716bfdf13459cfe7f8d899261d, type: 3}
+  - {fileID: 21300000, guid: 6f3c177abd8ec214ebc93482b46981b8, type: 3}
+  - {fileID: 21300000, guid: 4128a9dcab2b9904e993b0dd6e872723, type: 3}
+  - {fileID: 21300000, guid: 5ce98bb075df61f408348c1c06568807, type: 3}
+  - {fileID: 21300000, guid: d57f2219bd86c6a45bc36e9aa07a84a1, type: 3}
+  - {fileID: 21300000, guid: e795da3543fc86943bfd9edac1b86d39, type: 3}
+  - {fileID: 21300000, guid: ac4851420d1a5fa4ba37bb8c3f18dcee, type: 3}
+  color: 

@@ -1,5 +1,5 @@
 public class GameSceneConfig
 {
-    public static int width = 375;
-    public static int height = 667;
+    public const int WIDTH = 375;
+    public const int HEIGHT = 667;
 }
