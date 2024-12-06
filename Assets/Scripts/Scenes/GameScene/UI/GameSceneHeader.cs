@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,5 +46,11 @@ public class GameSceneHeader : MonoBehaviour
             gameScene.gameManager.gamePlay.Continue();
         };
         ScreenManager.OpenScreen(ScreenKey.SETTINGS_SCREEN);
+    }
+
+    public float GetHeight()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        return math.abs(rectTransform.anchoredPosition.y) + rectTransform.sizeDelta.y / 2;
     }
 }

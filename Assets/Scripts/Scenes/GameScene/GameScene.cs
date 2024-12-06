@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class GameScene : MonoBehaviour
 {
     public GameManager gameManager;
+    public GameSceneFooter footer;
+    public GameSceneHeader header;
     void Awake()
     {
         // TextAsset myAsset = Resources.Load("levels/level_00001.json");
@@ -12,7 +15,7 @@ public class GameScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        gameManager.UpdateRatioScale(GameSceneConfig.HEIGHT / 2 - header.GetHeight(), GameSceneConfig.HEIGHT / 2 - footer.GetHeight());
     }
 
     // Update is called once per frame

@@ -37,4 +37,10 @@ public class GameSceneFooter : MonoBehaviour
     {
         // gameManager.Retry();
     }
+
+    public float GetHeight()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        return rectTransform.anchoredPosition.y + rectTransform.sizeDelta.y / 2;
+    }
 }

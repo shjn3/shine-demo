@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ public class Tube : MonoBehaviour
     private Stack<Ball> ballStack = new();
     public BoxCollider2D boxCollider2D;
     public bool isSelected = false;
+    public int idx;
+    public GameObject ballPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +47,17 @@ public class Tube : MonoBehaviour
         return ball;
     }
 
+
+    public void GenerateBalls(List<string> colours)
+    {
+        foreach (var colour in colours)
+        {
+            GameObject ballObject = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+            ballObject.GetComponent<Ball>().SetColor(colour);
+            PushBall(ballObject.GetComponent<Ball>());
+        }
+        AlignBallsPosition();
+    }
     public string GetLastColor()
     {
         if (IsEmpty())
@@ -130,28 +144,23 @@ public class Tube : MonoBehaviour
         SoundManager.Play(SoundKey.UN_HIGHLIGHT);
         Vector3 to = new(0, GetBallPositionY(ballStack.Count - 1), 0);
         Ball ball = ballStack.Peek();
-        ball.Drop(to, 0.3f * CalculateDuration(ball.idx));
+        ball.Drop(to, CalculateDuration(ball.idx));
         isSelected = false;
         Debug.Log("Un Select " + ballStack.Count);
     }
 
     public static float CalculateDuration(int idx)
     {
-        return (GetTopPosition().y - GetBallPositionY(idx)) / (GetTopPosition().y - GetBallPositionY(0));
+        return Math.Abs((GetTopPosition().y - GetBallPositionY(idx)) / (GetTopPosition().y - GetBallPositionY(0)));
     }
 
     public bool AreAllBallsValid()
     {
-        if (IsEmpty() || GetMatchingBalls() == TubeConfig.VOLUME)
+        if (GetMatchingBalls() == TubeConfig.VOLUME)
         {
             return true;
         }
 
         return false;
-    }
-
-    public void MoveBallsTo(Tube to)
-    {
-        ///
     }
 }

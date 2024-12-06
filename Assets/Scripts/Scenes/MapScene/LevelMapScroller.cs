@@ -31,6 +31,6 @@ public class LevelMapScroller : ReuseScroller<LevelMapScrollerItemData>
         }
         UpdateItemsData(levelItemsData.ToArray());
 
-        ScrollTo(Mathf.RoundToInt(currentLevel / column));
+        ScrollTo(Mathf.CeilToInt(currentLevel / column));
     }
 }

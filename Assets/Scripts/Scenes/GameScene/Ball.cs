@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class Ball : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
 
-    private Tube tube;
+    public Tube tube;
     public int idx = 0;
     public string color = "";
     // Start is called before the first frame update
@@ -74,31 +75,54 @@ public class Ball : MonoBehaviour
     {
         this.tube = tube;
     }
-    Tween moveTween;
-    Tween dropTween;
 
-    public Tween Drop(Vector3 to, float duration = 1, float delay = 0)
+    public void Drop(Vector3 to, float duration = 1, float delay = 0)
     {
-        if (dropTween != null)
-        {
-            dropTween.Complete();
-            DOTween.Kill(dropTween);
-        }
-
-        dropTween = transform.DOLocalMove(to, duration).SetEase(Ease.OutBounce).SetDelay(delay);
-        return dropTween;
+        Vector3 position = transform.localPosition;
+        Drop(transform.localPosition, to, duration, delay, () => { });
     }
 
-    public Tween MoveTo(Vector3 to, float duration = 0.3f, float delay = 0)
+    public void Drop(Vector3 from, Vector3 to, float duration, float delay, Action onCompeted)
     {
-        if (moveTween != null)
+        Vector3 position = from;
+        int bounceTime = BallConfig.BOUNCE_COUNT;
+        bool isAllowBounce = true;
+        float prevValue = from.y;
+        bool IsBallDirectionReversed(float delta) => to.y < from.y ? delta > 0 : delta < 0;
+
+        DOVirtual.Float(from.y, to.y, duration, (value) =>
+            {
+                position.y = value;
+                transform.localPosition = position;
+                var delta = value - prevValue;
+                if (bounceTime > 0 && isAllowBounce)
+                {
+                    if (IsBallDirectionReversed(delta))
+                    {
+                        Debug.Log("Sound");
+                        SoundManager.Play(SoundKey.BOUND, bounceTime * 1f / BallConfig.BOUNCE_COUNT);
+                        isAllowBounce = false;
+                        bounceTime -= 1;
+                    }
+                }
+                else if (!IsBallDirectionReversed(delta)) isAllowBounce = true;
+                prevValue = value;
+            })
+            .SetEase(Ease.OutBounce)
+            .SetDelay(delay)
+            .OnComplete(() =>
+            {
+                SoundManager.Play(SoundKey.BOUND, 0.2f);
+                onCompeted.Invoke();
+            });
+    }
+
+    public void MoveTo(Vector3 to, float duration = 0.3f, float delay = 0, Action onCompleted = null
+    )
+    {
+        transform.DOLocalMove(to, duration).SetEase(Ease.InOutSine).SetDelay(delay).OnComplete(() =>
         {
-            moveTween.Complete();
-            DOTween.Kill(moveTween);
-        }
-
-        moveTween = transform.DOLocalMove(to, duration).SetEase(Ease.InOutSine).SetDelay(delay);
-
-        return moveTween;
+            onCompleted?.Invoke();
+        });
     }
 }

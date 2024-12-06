@@ -99,6 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boxCollider2D: {fileID: 992936018294328691}
+  isSelected: 0
+  idx: 0
+  ballPrefab: {fileID: 941116057537602089, guid: cb1028f6d4c0c1346a2b1652aac8355f, type: 3}
 --- !u!61 &992936018294328691
 BoxCollider2D:
   m_ObjectHideFlags: 0

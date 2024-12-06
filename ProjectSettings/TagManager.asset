@@ -41,8 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: GameObject
+  - name: Tube
     uniqueID: 752382357
+    locked: 0
+  - name: BallOutsideTube
+    uniqueID: 3411337735
     locked: 0
   - name: UI
     uniqueID: 499760367

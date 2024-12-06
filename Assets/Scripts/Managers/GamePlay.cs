@@ -1,10 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-
 using System;
-using Unity.VisualScripting;
-using DG.Tweening;
 
 public class GamePlay : MonoBehaviour
 {
@@ -17,12 +13,14 @@ public class GamePlay : MonoBehaviour
     public GameObject tubePrefab;
     public GameObject ballPrefab;
     public GameManager gameManager;
-    public List<List<Tube>> tubeGrid = null;
+    public List<Tube> tubes = null;
 
     private Tube fromTube;
     private int level = 0;
 
     private GamePlayState state;
+
+    private float ratioScale = 1f;
 
     void Update()
     {
@@ -45,6 +43,8 @@ public class GamePlay : MonoBehaviour
         gameManager.inputManager.pointerDownLeftCallback -= HandlePointerDown;
     }
 
+
+
     void Generate(int level)
     {
         gameManager.levelPlugin.LoadLevel(level);
@@ -55,59 +55,50 @@ public class GamePlay : MonoBehaviour
     void Generate(LevelPlugin.LevelData levelData)
     {
         //Destroy old objects
-        if (tubeGrid != null)
+        if (tubes != null)
         {
-            foreach (List<Tube> tubes in tubeGrid)
+
+            foreach (Tube tube in tubes)
             {
-                foreach (Tube tube in tubes)
-                {
-                    Destroy(tube.gameObject);
-                }
+                Destroy(tube.gameObject);
             }
-            tubeGrid = null;
+
+            tubes = null;
+        }
+        tubes = new();
+        //Generate new tubes
+        for (int i = 0; i < levelData.bottleList.Count; i++)
+        {
+            Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform).GetComponent<Tube>();
+            tube.GenerateBalls(levelData.bottleList[i]);
+            tube.idx = i;
+            tubes.Add(tube);
+        }
+        AlignTubes();
+    }
+
+    private void AlignTubes()
+    {
+        float padding = 0;
+        float maxColumn = Mathf.CeilToInt(tubes.Count / 2f);
+
+        float width = TubeConfig.WIDTH * ratioScale;
+        if (tubes.Count > 1)
+        {
+            padding = (GameSceneConfig.WIDTH - maxColumn * width) / (maxColumn + 1);
         }
 
-        //Generate new tubes
-        int bottleCount = levelData.bottleList.Count + 1;
-        bool stagger = bottleCount % 2 == 0;
-        int maxTubeInRow = Math.Max(1, Mathf.RoundToInt(bottleCount / GamePlayConfig.MAX_ROW));
-        tubeGrid = new();
-        float gapVertical = 50f;
-        float x = 0;
-        float y = (TubeConfig.HEIGHT + gapVertical) / 2;
-        float remainingHorizontalSpace = Math.Max(0, GameSceneConfig.WIDTH - maxTubeInRow * TubeConfig.WIDTH);
-        float gapHorizontal = remainingHorizontalSpace / (maxTubeInRow + 1);
+        float xTop = -GameSceneConfig.WIDTH / 2 + width / 2 + padding;
+        float xBottom = tubes.Count % 2 == 0 ? xTop : -GameSceneConfig.WIDTH / 2 + width + padding * 1.5f;
 
-        int bottleListIdx = 0;
-        for (int row = 0; row < GamePlayConfig.MAX_ROW; row++)
+        for (int i = 0; i < tubes.Count; i += 2)
         {
-            var tubeList = new List<Tube>();
-            int tubeInRow = stagger && row % 2 != 0 ? maxTubeInRow - 1 : maxTubeInRow;
+            tubes[i].transform.localPosition = new Vector3(xTop, GamePlayConfig.TUBE_GAP_VERTICAL, 0);
+            if (i + 1 < tubes.Count)
+                tubes[i + 1].transform.localPosition = new Vector3(xBottom, -GamePlayConfig.TUBE_GAP_VERTICAL, 0);
 
-            float marginLeft = stagger && row % 2 != 0 ? Math.Max(0, GameSceneConfig.WIDTH - (tubeInRow * TubeConfig.WIDTH + gapHorizontal * (tubeInRow - 1))) / 2f : gapHorizontal;
-
-            x = -GameSceneConfig.WIDTH / 2 + marginLeft + TubeConfig.WIDTH / 2;
-            for (int column = 0; column < tubeInRow; column++)
-            {
-
-                GameObject tubeObject = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform);
-                Tube tube = tubeObject.GetComponent<Tube>();
-                tubeList.Add(tube);
-                tubeObject.transform.localPosition = new Vector3(x, y, 0);
-                x += TubeConfig.WIDTH + gapHorizontal;
-
-                List<string> colours = levelData.bottleList[bottleListIdx];
-                bottleListIdx += 1;
-                foreach (var colour in colours)
-                {
-                    GameObject ballObject = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
-                    ballObject.GetComponent<Ball>().SetColor(colour);
-                    tube.PushBall(ballObject.GetComponent<Ball>());
-                }
-                tube.AlignBallsPosition();
-            }
-            tubeGrid.Add(tubeList);
-            y -= TubeConfig.HEIGHT + gapVertical;
+            xTop += padding + width;
+            xBottom += padding + width;
         }
     }
 
@@ -127,8 +118,54 @@ public class GamePlay : MonoBehaviour
 
         return from.GetLastColor() == to.GetLastColor() && emptyVolume >= ballVolume;
     }
+    public void HandlePointerDown(Vector3 mousePosition)
+    {
+        if (state != GamePlayState.Ready) return;
+        Tube selectedTube = tubes.Find(tube => tube.boxCollider2D.OverlapPoint(mousePosition));
 
-    public bool SwapBalls(Tube from, Tube to, Action callback)
+        if (selectedTube == null) return;
+        if (selectedTube.AreAllBallsValid())
+        {
+            return;
+        }
+        if (fromTube == null)
+        {
+            if (!selectedTube.IsEmpty())
+            {
+                selectedTube.Select();
+                fromTube = selectedTube;
+            }
+            return;
+        }
+
+        if (fromTube == selectedTube)
+        {
+            selectedTube.UnSelect();
+            fromTube = null;
+            return;
+        }
+
+        Action swapBallCallback = () =>
+        {
+            if (IsWin()) HandleWin();
+            else if (IsLose()) HandleLose();
+
+            fromTube = null;
+        };
+
+
+        if (SwapBall(fromTube, selectedTube, swapBallCallback))
+            Debug.Log("Successfully");
+        else
+            Debug.Log("UnSuccessfully");
+    }
+
+    public float[][] delayArrArr = { new float[] { 0f},
+                               new float[] { 0f, 0.077f},
+                               new float[] { 0f, 0.077f, 0.22f }, };
+
+
+    public bool SwapBall(Tube from, Tube to, Action callback)
     {
         if (!IsSwapBalls(from, to))
         {
@@ -140,12 +177,12 @@ public class GamePlay : MonoBehaviour
         List<Ball> balls = new();
         int firstToIdx = Math.Max(0, TubeConfig.VOLUME - to.GetEmptyVolume());
         int firstFromIdx = Math.Max(0, TubeConfig.VOLUME - from.GetEmptyVolume());
-        Debug.Log("first_position: " + to.GetEmptyVolume() + " " + firstToIdx + " " + firstFromIdx);
+
         while (from.GetLastColor() == color)
         {
             var ball = from.PopBall();
-            balls.Add(ball);
             to.PushBall(ball);
+            balls.Add(ball);
         }
 
         Action completedSwap = () =>
@@ -154,6 +191,10 @@ public class GamePlay : MonoBehaviour
             to.AlignBallsPosition();
             from.AlignBallsPosition();
             callback.Invoke();
+            if (to.AreAllBallsValid())
+            {
+                SoundManager.Play(SoundKey.CONFETTI);
+            }
         };
 
         if (balls.Count == 0)
@@ -165,109 +206,38 @@ public class GamePlay : MonoBehaviour
         int countBall = 0;
         float maxDuration = 0.3f;
 
+        float[] delayArr = balls.Count == 0 ? new float[] { } : delayArrArr[balls.Count - 1];
 
-        Debug.Log("from" + from.transform.localPosition + "  " + to.transform.localPosition + " " + (to.transform.localPosition - from.transform.localPosition) + " " + (to.transform.localPosition + from.transform.localPosition));
         for (int i = 0; i < balls.Count; i++)
         {
             var ball = balls[i];
             Vector3 fromTopPosition = -to.transform.localPosition + from.transform.localPosition + Tube.GetTopPosition();
 
-            float duration = 0.3f * ((fromTopPosition.y - ball.transform.localPosition.y) / (fromTopPosition.y - Tube.GetBallPositionY(0)));
+            float duration = maxDuration * Math.Abs((fromTopPosition.y - ball.transform.localPosition.y) / (Tube.GetTopPosition().y - Tube.GetBallPositionY(0)));
 
             Vector3 toTopPosition = Tube.GetTopPosition();
             Vector3 endPosition = new Vector3(0, Tube.GetBallPositionY(firstToIdx + i), 0);
-
-            ball.MoveTo(fromTopPosition, duration).OnComplete(() =>
+            Action onDropCompleted = () =>
             {
-                ball.MoveTo(toTopPosition, maxDuration);
+                if (countBall == balls.Count - 1)
+                {
+                    completedSwap.Invoke();
+                }
+                countBall++;
+            };
+            float delay = Mathf.Max(0, delayArr[i] - delayArr[i] * duration / maxDuration);
+            ball.MoveTo(fromTopPosition, duration, 0, () =>
+            {
+                ball.spriteRenderer.sortingLayerName = "BallOutsideTube";
             });
 
-            ball.Drop(endPosition, Tube.CalculateDuration(firstToIdx + i), maxDuration + duration)
-                  .OnComplete(() =>
-                  {
-                      SoundManager.Play(SoundKey.BOUND);
-                      if (countBall == balls.Count - 1)
-                      {
-                          completedSwap.Invoke();
-                      }
-                      countBall++;
-                  });
+            ball.MoveTo(toTopPosition, maxDuration, duration, () =>
+            { ball.spriteRenderer.sortingLayerName = "Default"; });
+
+            ball.Drop(toTopPosition, endPosition, Tube.CalculateDuration(firstToIdx + i), maxDuration + duration, onDropCompleted);
         }
+
         return true;
-    }
-
-    public void HandlePointerDown(Vector3 mousePosition)
-    {
-        if (state != GamePlayState.Ready)
-        {
-            return;
-        }
-
-        Tube selectedTube = null;
-        foreach (var tubeList in tubeGrid)
-        {
-            foreach (var tube in tubeList)
-            {
-                if (tube.boxCollider2D.OverlapPoint(mousePosition))
-                {
-                    selectedTube = tube;
-                    break;
-                };
-            }
-            if (selectedTube != null)
-            {
-                break;
-            }
-        }
-
-        if (selectedTube == null)
-        {
-            return;
-        }
-
-        if (fromTube == null)
-        {
-            if (!selectedTube.IsEmpty())
-            {
-                selectedTube.Select();
-                fromTube = selectedTube;
-            }
-
-            return;
-        }
-
-        if (fromTube == selectedTube)
-        {
-            selectedTube.UnSelect();
-
-        }
-        else
-        {
-            if (SwapBalls(fromTube, selectedTube, () =>
-            {
-                if (IsWin())
-                {
-                    HandleWin();
-                }
-                else
-                {
-                    if (IsLose())
-                    {
-                        HandleLose();
-                    }
-                }
-            }))
-            {
-                Debug.Log("Successfully");
-            }
-            else
-            {
-                Debug.Log("UnSuccessfully");
-            }
-        }
-
-
-        fromTube = null;
     }
 
 
@@ -285,54 +255,30 @@ public class GamePlay : MonoBehaviour
 
     public bool IsWin()
     {
-        foreach (var tubeList in tubeGrid)
-        {
-            foreach (var tube in tubeList)
-            {
-                if (!tube.AreAllBallsValid())
-                {
-                    return false;
-                }
-            }
-
-        }
-        return true;
+        return tubes.Find(tube => !tube.AreAllBallsValid() && !tube.IsEmpty()) == null;
     }
 
     public void HandleWin()
     {
         Pause();
-
         LevelCompletedScreen screen = ScreenManager.GetScreen<LevelCompletedScreen>();
-        screen.onceClose += () =>
-        {
-            gameManager.gamePlay.NextLevel();
-        };
+        screen.onceClose += () => { gameManager.gamePlay.NextLevel(); };
         ScreenManager.OpenScreen(ScreenKey.LEVEL_COMPLETED_SCREEN);
     }
 
     public bool IsLose()
     {
         List<Tube> remainTubes = new();
-        foreach (var tubeList in tubeGrid)
+
+        foreach (var tube in tubes)
         {
-            foreach (var tube in tubeList)
-            {
-                if (tube.IsEmpty())
-                {
-                    return false;
-                }
-                if (!tube.AreAllBallsValid())
-                {
-                    remainTubes.Add(tube);
-                }
-            }
+            if (tube.IsEmpty()) return false;
+            if (!tube.AreAllBallsValid() && !tube.IsEmpty())
+                remainTubes.Add(tube);
         }
 
-        if (remainTubes.Count == 0)
-        {
-            return false;
-        }
+
+        if (remainTubes.Count == 0) return false;
 
         for (int i = 0; i < remainTubes.Count - 1; i++)
         {
@@ -342,15 +288,14 @@ public class GamePlay : MonoBehaviour
 
             for (int j = i + 1; j < remainTubes.Count; j++)
             {
-                if (fromLastColor == remainTubes[j].GetLastColor())
+                if (fromLastColor != remainTubes[j].GetLastColor())
                 {
-                    int toEmptyVolume = remainTubes[j].GetEmptyVolume();
-                    int toMatchingBalls = remainTubes[j].GetMatchingBalls();
-                    if (fromEmptyVolume >= toMatchingBalls || fromMatchingBalls <= toEmptyVolume)
-                    {
-                        return false;
-                    }
+                    continue;
                 }
+
+                if (fromEmptyVolume >= remainTubes[j].GetMatchingBalls() || fromMatchingBalls <= remainTubes[j].GetEmptyVolume())
+                    return false;
+
             }
         }
 
@@ -361,10 +306,8 @@ public class GamePlay : MonoBehaviour
     {
         Pause();
         LevelFailedScreen screen = ScreenManager.GetScreen<LevelFailedScreen>();
-        screen.onceClose += () =>
-        {
-            gameManager.gamePlay.Retry();
-        };
+        screen.onceClose += () => gameManager.gamePlay.Retry();
+
         ScreenManager.OpenScreen(ScreenKey.LEVEL_FAILED_SCREEN);
     }
 
@@ -378,4 +321,10 @@ public class GamePlay : MonoBehaviour
         state = GamePlayState.Ready;
     }
 
+    public void UpdateRatio(float ratioScale = 1f)
+    {
+        this.ratioScale = ratioScale;
+        gameObject.transform.localScale = new Vector3(ratioScale, ratioScale, ratioScale);
+        AlignTubes();
+    }
 }

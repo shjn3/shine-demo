@@ -111,4 +111,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d57f2219bd86c6a45bc36e9aa07a84a1, type: 3}
   - {fileID: 21300000, guid: e795da3543fc86943bfd9edac1b86d39, type: 3}
   - {fileID: 21300000, guid: ac4851420d1a5fa4ba37bb8c3f18dcee, type: 3}
+  tube: {fileID: 0}
+  idx: 0
   color: 
