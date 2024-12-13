@@ -10,7 +10,7 @@ public class GameScene : MonoBehaviour
     public GameSceneHeader header;
     void Awake()
     {
-        // TextAsset myAsset = Resources.Load("levels/level_00001.json");
+
     }
     // Start is called before the first frame update
     void Start()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class DataStorage
 {
@@ -34,5 +35,25 @@ public class DataStorage
     public static bool GetBool(string key)
     {
         return PlayerPrefs.GetInt(key) == 1 ? true : false;
+    }
+
+    public static string GetString(string key, string defaultValue = "")
+    {
+        string value = PlayerPrefs.GetString(key);
+        return string.IsNullOrEmpty(value) ? defaultValue : value;
+    }
+
+    public static void SetDateTime(string key, DateTime dateTime)
+    {
+        SetString(key, dateTime.ToFileTimeUtc().ToString());
+    }
+
+    public static DateTime GetDateTime(string key)
+    {
+        if (long.TryParse(GetString(key), out var v))
+        {
+            return DateTime.FromFileTime(v);
+        }
+        return DateTime.MinValue;
     }
 }

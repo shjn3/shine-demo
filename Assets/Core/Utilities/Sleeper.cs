@@ -26,6 +26,18 @@ public class Sleeper : MonoBehaviour
         });
     }
 
+    public Promise WaitForSeconds(float seconds, Action callback)
+    {
+        return new Promise(resolve =>
+        {
+            StartCoroutine(SleepAsync(seconds, () =>
+            {
+                resolve();
+                callback.Invoke();
+            }));
+        });
+    }
+
     private IEnumerator SleepAsync(float seconds, Action callback)
     {
         yield return new WaitForSeconds(seconds);

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tube : MonoBehaviour
@@ -12,7 +11,8 @@ public class Tube : MonoBehaviour
     public BoxCollider2D boxCollider2D;
     public bool isSelected = false;
     public int idx;
-    public GameObject ballPrefab;
+    [SerializeField]
+    private GameObject ballPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -162,5 +162,20 @@ public class Tube : MonoBehaviour
         }
 
         return false;
+    }
+
+    public Ball[] getLastBalls(int maxCount = 0)
+    {
+        List<Ball> balls = new();
+        string color = GetLastColor();
+
+        foreach (var ball in ballStack)
+        {
+            if (ball.color != color)
+                break;
+            balls.Add(ball);
+        }
+
+        return balls.ToArray();
     }
 }

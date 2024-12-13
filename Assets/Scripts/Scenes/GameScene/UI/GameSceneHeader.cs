@@ -9,6 +9,7 @@ public class GameSceneHeader : MonoBehaviour
     public Text levelText;
     public Button pauseButton;
     public Button retryButton;
+    public SafeArea safeArea;
 
     void Awake()
     {
@@ -19,7 +20,9 @@ public class GameSceneHeader : MonoBehaviour
 
     void Start()
     {
-        //
+        var position = transform.localPosition;
+        position.y += safeArea.GetComponent<RectTransform>().sizeDelta.y;
+        transform.localPosition = position;
     }
 
     void Update()

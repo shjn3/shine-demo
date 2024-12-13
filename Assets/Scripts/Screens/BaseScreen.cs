@@ -54,7 +54,7 @@ public class BaseScreen : MonoBehaviour
     private Tween fakeInBackgroundAnimation;
     private Tween fakeOutBackgroundAnimation;
 
-    private Promise RunFadeInBackground()
+    protected virtual Promise RunFadeInBackground()
     {
         if (background == null)
         {
@@ -76,7 +76,7 @@ public class BaseScreen : MonoBehaviour
    });
     }
 
-    private Promise RunFadeOutBackground()
+    protected virtual Promise RunFadeOutBackground()
     {
         if (background == null)
         {

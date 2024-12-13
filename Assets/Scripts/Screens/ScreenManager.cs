@@ -8,9 +8,10 @@ public class ScreenKey
     public const string LEVEL_COMPLETED_SCREEN = "LevelCompletedScreen";
     public const string LEVEL_FAILED_SCREEN = "LevelFailedScreen";
     public const string SETTINGS_SCREEN = "SettingsScreen";
-
-
+    public const string NOTIFY_SCREEN = "NotifyScreen";
+    public const string ADS_SCREEN = "AdsScreen";
 }
+
 public class ScreenManager : MonoBehaviour
 {
     public static ScreenManager instance;
@@ -35,16 +36,10 @@ public class ScreenManager : MonoBehaviour
 
     public static void OpenScreen(string name)
     {
-        if (instance == null)
-        {
-            return;
-        }
+        if (instance == null) return;
         var screen = GetScreen(name);
-        if (screen == null)
-        {
-            return;
+        if (screen == null) return;
 
-        }
         screen.GetComponent<Canvas>().worldCamera = Camera.main;
         screen.gameObject.SetActive(true);
         instance.currentScreens.Push(screen);

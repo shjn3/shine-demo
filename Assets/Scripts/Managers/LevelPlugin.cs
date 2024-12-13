@@ -15,7 +15,6 @@ public class LevelPlugin
 
     private Dictionary<int, LevelData> levelDataByLevel = new Dictionary<int, LevelData>();
     public int currentLevel = 0;
-
     public LevelPlugin()
     {
         //

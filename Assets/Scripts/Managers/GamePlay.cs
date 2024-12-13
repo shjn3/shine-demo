@@ -1,6 +1,26 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UIElements;
+using System.Linq;
+
+public struct BallsMove
+{
+
+    public int fromLayer;
+    public int toLayer;
+    public int count;
+
+    public BallsMove Reverse()
+    {
+        return new BallsMove()
+        {
+            fromLayer = toLayer,
+            toLayer = fromLayer,
+            count = count
+        };
+    }
+}
 
 public class GamePlay : MonoBehaviour
 {
@@ -21,6 +41,7 @@ public class GamePlay : MonoBehaviour
     private GamePlayState state;
 
     private float ratioScale = 1f;
+    public Stack<BallsMove> moveStack = new();
 
     void Update()
     {
@@ -171,13 +192,8 @@ public class GamePlay : MonoBehaviour
         {
             return false;
         }
-
-        state = GamePlayState.Swapping;
         string color = from.GetLastColor();
         List<Ball> balls = new();
-        int firstToIdx = Math.Max(0, TubeConfig.VOLUME - to.GetEmptyVolume());
-        int firstFromIdx = Math.Max(0, TubeConfig.VOLUME - from.GetEmptyVolume());
-
         while (from.GetLastColor() == color)
         {
             var ball = from.PopBall();
@@ -187,7 +203,6 @@ public class GamePlay : MonoBehaviour
 
         Action completedSwap = () =>
         {
-            state = GamePlayState.Ready;
             to.AlignBallsPosition();
             from.AlignBallsPosition();
             callback.Invoke();
@@ -202,13 +217,40 @@ public class GamePlay : MonoBehaviour
             completedSwap.Invoke();
             return false;
         }
+        BallsMove move = new()
+        {
+            fromLayer = from.idx,
+            toLayer = to.idx,
+            count = balls.Count
+        };
+        moveStack.Push(move);
+        RunSwapBallsAnimation(move, completedSwap);
 
+        return true;
+    }
+
+
+    void RunSwapBallsAnimation(BallsMove ballsMove, Action callback)
+    {
+
+        state = GamePlayState.Swapping;
+        Tube from = tubes[ballsMove.fromLayer];
+        Tube to = tubes[ballsMove.toLayer];
+        Ball[] lastBalls = to.getLastBalls();
+        Ball[] balls = new Ball[ballsMove.count];
+        for (int i = ballsMove.count - 1; i >= 0; i--)
+        {
+            balls[ballsMove.count - 1 - i] = lastBalls[i];
+        }
+
+        int firstToIdx = Math.Max(0, TubeConfig.VOLUME - (to.GetEmptyVolume() + ballsMove.count));
+        int firstFromIdx = Math.Max(0, TubeConfig.VOLUME - (from.GetEmptyVolume() - ballsMove.count));
         int countBall = 0;
         float maxDuration = 0.3f;
 
-        float[] delayArr = balls.Count == 0 ? new float[] { } : delayArrArr[balls.Count - 1];
+        float[] delayArr = delayArrArr[ballsMove.count - 1];
 
-        for (int i = 0; i < balls.Count; i++)
+        for (int i = 0; i < ballsMove.count; i++)
         {
             var ball = balls[i];
             Vector3 fromTopPosition = -to.transform.localPosition + from.transform.localPosition + Tube.GetTopPosition();
@@ -219,9 +261,10 @@ public class GamePlay : MonoBehaviour
             Vector3 endPosition = new Vector3(0, Tube.GetBallPositionY(firstToIdx + i), 0);
             Action onDropCompleted = () =>
             {
-                if (countBall == balls.Count - 1)
+                if (countBall == ballsMove.count - 1)
                 {
-                    completedSwap.Invoke();
+                    state = GamePlayState.Ready;
+                    callback.Invoke();
                 }
                 countBall++;
             };
@@ -236,10 +279,7 @@ public class GamePlay : MonoBehaviour
 
             ball.Drop(toTopPosition, endPosition, Tube.CalculateDuration(firstToIdx + i), maxDuration + duration, onDropCompleted);
         }
-
-        return true;
     }
-
 
     public void Retry()
     {
@@ -326,5 +366,43 @@ public class GamePlay : MonoBehaviour
         this.ratioScale = ratioScale;
         gameObject.transform.localScale = new Vector3(ratioScale, ratioScale, ratioScale);
         AlignTubes();
+    }
+
+    public void AddTube()
+    {
+        Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform).GetComponent<Tube>();
+        tube.idx = tubes.Count;
+
+        tubes.Add(tube);
+        AlignTubes();
+    }
+
+    public bool IsCanUndo()
+    {
+        return moveStack.Count != 0 && state == GamePlayState.Ready;
+    }
+
+    public void Undo()
+    {
+        if (!IsCanUndo())
+        {
+            Debug.Log("can't undo");
+            return;
+        }
+        BallsMove move = moveStack.Pop().Reverse();
+        Debug.Log("undo: " + moveStack.Count);
+
+        Tube from = tubes[move.fromLayer];
+        Tube to = tubes[move.toLayer];
+
+        for (int i = 0; i < move.count; i++)
+        {
+            to.PushBall(from.PopBall());
+        }
+
+        RunSwapBallsAnimation(move, () =>
+        {
+
+        });
     }
 }
