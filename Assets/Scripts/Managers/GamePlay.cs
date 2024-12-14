@@ -104,19 +104,14 @@ public class GamePlay : MonoBehaviour
             return;
         }
 
-        //Check to swap
-        if (!toTube.IsCanReceiveBalls()) return;
+        if (!IsSwapBalls(selectedTube, toTube)) return;
 
         SwapBall(selectedTube, toTube, () =>
         {
             CheckGameState();
         });
-
-
         selectedTube = null;
     }
-
-
 
     void BuildLevel(int level)
     {

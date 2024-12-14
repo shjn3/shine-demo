@@ -37,4 +37,44 @@ public class LevelPlayAds : Ads
     {
         IronSource.Agent.onApplicationPause(isPaused);
     }
+
+    public override void ShowRewardedAd(Action<bool> callback)
+    {
+        if (rewardedAd == null)
+        {
+            AdsManager.ShowNotifyScreen("Load rewarded ad failed!", 3);
+            callback.Invoke(false);
+            return;
+        }
+
+        rewardedAd.ShowRewardedAd(callback);
+    }
+
+    public override void HideBannerAd()
+    {
+        this.bannerAd?.HideBannerAd();
+    }
+
+    public override void ShowBannerAd()
+    {
+        this.bannerAd?.ShowBannerAd();
+    }
+
+
+    public override void DestroyBannerAd()
+    {
+        this.bannerAd?.DestroyBannerAd();
+    }
+
+    public override void ShowInterstitialAd(Action<bool> callback)
+    {
+        if (interstitialAd == null)
+        {
+            AdsManager.ShowNotifyScreen("Load Interstitial ad failed!", 3);
+            callback.Invoke(false);
+            return;
+        }
+
+        interstitialAd?.ShowInterstitialAd(callback);
+    }
 }

@@ -1,7 +1,3 @@
-using System.Collections;
-using UnityEngine;
-using UnityEngine.UIElements;
-
 public class TestData
 {
     public int idx;

@@ -3,14 +3,13 @@ using System;
 public partial class Ads
 {
     public AdsConfig adsConfig;
-    public IBannerAd bannerAd;
-    public IInterstitialAd interstitialAd;
-    public IRewardedAd rewardedAd;
+    protected IBannerAd bannerAd;
+    protected IInterstitialAd interstitialAd;
+    protected IRewardedAd rewardedAd;
 
     public Ads(AdsConfig config)
     {
         adsConfig = config;
-        Init();
     }
 
     public virtual void Init()
@@ -40,4 +39,30 @@ public partial class Ads
     {
         //
     }
+
+    public virtual void ShowRewardedAd(Action<bool> callback)
+    {
+        //
+    }
+
+    public virtual void ShowInterstitialAd(Action<bool> callback)
+    {
+        //
+    }
+
+    public virtual void HideBannerAd()
+    {
+        //
+    }
+
+    public virtual void ShowBannerAd()
+    {
+        //
+    }
+
+    public virtual void DestroyBannerAd()
+    {
+        //
+    }
+
 }

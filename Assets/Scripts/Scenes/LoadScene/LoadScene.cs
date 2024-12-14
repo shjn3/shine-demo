@@ -35,7 +35,7 @@ public class LoadScene : MonoBehaviour
     void LoadAsync()
     {
 #if !UNITY_EDITOR
-        Addressables.LoadAssetAsync<GameObject>("ShineCore").Completed += LoadScene.OnLoadDone;
+         Core.Init();
 #endif
     }
 }

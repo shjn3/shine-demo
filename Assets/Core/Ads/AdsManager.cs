@@ -3,7 +3,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-public class AdsManager : MonoBehaviour
+public class AdsManager
 {
     public static AdsManager instance;
     public Ads.AdsConfig adsConfig;
@@ -20,12 +20,12 @@ public class AdsManager : MonoBehaviour
             LevelPlayAdsConfig => new LevelPlayAds((LevelPlayAdsConfig)config),
             _ => new MockAds(config),
         };
-        ads.bannerAd.ShowBannerAd();
+
 
         CreateListener();
     }
 
-    public void CreateListener()
+    private void CreateListener()
     {
         var go = new GameObject("AdsManagerListener");
         GameObject.DontDestroyOnLoad(go);
@@ -35,70 +35,36 @@ public class AdsManager : MonoBehaviour
 
     public static void Init(Ads.AdsConfig config)
     {
-        if (instance != null)
-        {
-            return;
-        }
+        Debug.Log("ads Init");
         instance = new AdsManager(config);
-    }
-
-    public static void HideBannerAd()
-    {
-        if (instance == null) return;
-        if (!instance.enable) return;
-        instance.ads.bannerAd.HideBannerAd();
-    }
-
-    public static void ShowBannerAd()
-    {
-        if (instance == null) return;
-        if (!instance.enable) return;
-        instance.ads.bannerAd.ShowBannerAd();
-    }
-
-    public static void DestroyBannerAd()
-    {
-        if (instance == null) return;
-        if (!instance.enable) return;
-        instance.ads.bannerAd.DestroyBannerAd();
     }
 
     public static void ShowInterstitialAd(Action<bool> callback)
     {
-        if (instance == null)
+        if (!HasAds())
         {
             ShowNotifyScreen("Load Interstitial ad failed!", 3);
             callback.Invoke(false);
             return;
         }
 
-        if (!instance.enable)
-        {
-            callback.Invoke(false);
-            return;
-        }
-
-        instance.ads.interstitialAd.ShowInterstitialAd(callback);
+        instance.ads.ShowInterstitialAd(callback);
     }
 
     public static void ShowRewardedAd(Action<bool> callback)
     {
-        if (instance == null)
+        Debug.Log("Instance: " + instance);
+        if (!HasAds())
         {
             ShowNotifyScreen("Load rewarded failed!", 3);
             callback.Invoke(false);
             return;
         }
 
-        if (!instance.enable)
-        {
-            callback.Invoke(false);
-            return;
-        }
-        instance.ads.rewardedAd.ShowRewardedAd(callback);
+        instance.ads.ShowRewardedAd(callback);
     }
 
-    public void OnApplicationPause(bool isPaused)
+    void OnApplicationPause(bool isPaused)
     {
         ads?.OnApplicationPause(isPaused);
     }
@@ -113,5 +79,10 @@ public class AdsManager : MonoBehaviour
         }
         screen.PassData(message, duration, isShowLoading);
         ScreenManager.OpenScreen(screen.screenName);
+    }
+
+    private static bool HasAds()
+    {
+        return !(instance == null || instance.ads == null || !instance.enable);
     }
 }

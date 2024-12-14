@@ -5,6 +5,7 @@ using com.unity3d.mediation;
 public class LPBannerAd : Ads.IBannerAd
 {
     private LevelPlayBannerAd bannerAd;
+    public Action OnLoaded = () => { };
     public bool isEnable = false;
 
     public LPBannerAd(string adUnitId)
@@ -59,7 +60,9 @@ public class LPBannerAd : Ads.IBannerAd
     private void BannerOnAdLoadedEvent(LevelPlayAdInfo info)
     {
         isEnable = true;
-        UnityEngine.Debug.Log("");
+        OnLoaded.Invoke();
+        ShowBannerAd();
+        UnityEngine.Debug.Log("On Loaded");
     }
 
     public void HideBannerAd()
