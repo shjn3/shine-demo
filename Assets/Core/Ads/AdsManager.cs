@@ -9,16 +9,10 @@ public class AdsManager : MonoBehaviour
     public Ads.AdsConfig adsConfig;
     public Ads ads;
     bool enable = false;
+    private AdsManagerListener listener;
 
-    public void Init(Ads.AdsConfig config)
+    public AdsManager(Ads.AdsConfig config)
     {
-        if (instance != null)
-        {
-            return;
-        }
-        instance = this;
-
-
         enable = true;
         adsConfig = config;
         ads = adsConfig switch
@@ -27,37 +21,53 @@ public class AdsManager : MonoBehaviour
             _ => new MockAds(config),
         };
         ads.bannerAd.ShowBannerAd();
+
+        CreateListener();
     }
 
-    public void HideBannerAd()
+    public void CreateListener()
     {
-        if (!enable) return;
-        ads.bannerAd.HideBannerAd();
+        var go = new GameObject("AdsManagerListener");
+        GameObject.DontDestroyOnLoad(go);
+        listener = go.AddComponent<AdsManagerListener>();
+        listener.onApplicationPauseCallback += OnApplicationPause;
     }
 
-    public void ShowBannerAd()
+    public static void Init(Ads.AdsConfig config)
     {
-        if (!enable) return;
-        ads.bannerAd.ShowBannerAd();
+        if (instance != null)
+        {
+            return;
+        }
+        instance = new AdsManager(config);
     }
 
-    public void DestroyBannerAd()
+    public static void HideBannerAd()
     {
-        if (!enable) return;
-        ads.bannerAd.DestroyBannerAd();
-
+        if (instance == null) return;
+        if (!instance.enable) return;
+        instance.ads.bannerAd.HideBannerAd();
     }
 
-    public float GetBannerHeight()
+    public static void ShowBannerAd()
     {
-        return ads.bannerAd.GetHeight();
+        if (instance == null) return;
+        if (!instance.enable) return;
+        instance.ads.bannerAd.ShowBannerAd();
+    }
+
+    public static void DestroyBannerAd()
+    {
+        if (instance == null) return;
+        if (!instance.enable) return;
+        instance.ads.bannerAd.DestroyBannerAd();
     }
 
     public static void ShowInterstitialAd(Action<bool> callback)
     {
         if (instance == null)
         {
-            ShowNotify("Load Interstitial ad failed!", 3);
+            ShowNotifyScreen("Load Interstitial ad failed!", 3);
             callback.Invoke(false);
             return;
         }
@@ -75,7 +85,7 @@ public class AdsManager : MonoBehaviour
     {
         if (instance == null)
         {
-            ShowNotify("Load rewarded failed!", 3);
+            ShowNotifyScreen("Load rewarded failed!", 3);
             callback.Invoke(false);
             return;
         }
@@ -93,7 +103,7 @@ public class AdsManager : MonoBehaviour
         ads?.OnApplicationPause(isPaused);
     }
 
-    public static void ShowNotify(string message, float duration = -1, bool isShowLoading = false)
+    public static void ShowNotifyScreen(string message, float duration = -1, bool isShowLoading = false)
     {
         NotifyScreen screen = ScreenManager.GetScreen<NotifyScreen>();
         if (screen == null)

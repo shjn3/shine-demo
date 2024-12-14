@@ -113,6 +113,7 @@ public class GameSceneFooter : MonoBehaviour
 
     public void OnHintButtonClick()
     {
+        this.hintButton.SetDisable();
         if (DataStorage.GetInt(Player.PlayerDataKey.HINT_COUNT, 0) == 0)
         {
             AdsManager.ShowRewardedAd((bool isRewarded) =>
@@ -123,11 +124,27 @@ public class GameSceneFooter : MonoBehaviour
                 hintButton.SetCountText(1);
             });
         }
-
-        if (gameScene.gameManager.ShowHint())
+        Action onCompleted = () =>
         {
-            DataStorage.SetInt(Player.PlayerDataKey.HINT_COUNT, Math.Max(0, DataStorage.GetInt(Player.PlayerDataKey.HINT_COUNT, 0) - 1));
-        }
+            hintButton.SetEnable();
+        };
+
+        Action<bool> onStarted = (bool isCanShow) =>
+        {
+            if (!isCanShow)
+                return;
+
+            int count = DataStorage.GetInt(Player.PlayerDataKey.HINT_COUNT, 0);
+            DataStorage.SetInt(Player.PlayerDataKey.HINT_COUNT, Math.Max(0, count - 1));
+
+            if (count == 1)
+                hintButton.ShowAdsIcon();
+            else
+                hintButton.SetCountText(count - 1);
+
+        };
+
+        gameScene.gameManager.ShowHint(onCompleted, onStarted);
     }
 
     public float GetHeight()

@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using ShineCore;
 using UnityEngine;
 public struct Suggestion
 {
@@ -27,7 +29,6 @@ public class SuggestionManager
 
     private Suggestion GetSuggestion()
     {
-
         return new Suggestion()
         {
             fromWorldPosition = gameManager.gamePlay.tubes[(int)solution.moves[0].x].GetLastBallWorldPosition(),
@@ -38,12 +39,10 @@ public class SuggestionManager
     GameSolution solution;
     public bool IsCanShowHint()
     {
-
         if (solution.moves == null || solution.moves.Length == 0)
         {
             return false;
         }
-
         return true;
     }
 
@@ -52,17 +51,25 @@ public class SuggestionManager
         solution = GameLogic.Solve(gameManager.gamePlay.GetGameStateData());
     }
 
-    public bool ShowHint()
+    public void ShowHint(Action onCompletedCallback, Action<bool> onStartCallback)
     {
         FindSolution();
         if (!IsCanShowHint() || guide == null)
-            return false;
-        guide?.Show(GetSuggestion());
-        return true;
+        {
+            AdsManager.ShowNotifyScreen("Can't find any solution!", 5);
+            onStartCallback.Invoke(false);
+            onCompletedCallback.Invoke();
+            return;
+        }
+
+        onStartCallback.Invoke(true);
+        guide.Show(GetSuggestion()).Then(onCompletedCallback);
     }
 
     public void HintHint()
     {
         guide?.Hide();
     }
+
+
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using ShineCore;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,8 +42,8 @@ public class GameManager : MonoBehaviour
         gamePlay.UpdateRatio(scaleRatio * ratio);
     }
 
-    public bool ShowHint()
+    public void ShowHint(Action onCompletedCallback, Action<bool> onStartCallback)
     {
-        return suggestionManager.ShowHint();
+        suggestionManager.ShowHint(onCompletedCallback, onStartCallback);
     }
 }

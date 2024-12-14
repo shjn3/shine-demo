@@ -21,7 +21,7 @@ public class Core : MonoBehaviour
             Destroy(gameObject);
         }
 
-        Init2();
+
     }
     public static void Init()
     {
@@ -36,9 +36,7 @@ public class Core : MonoBehaviour
             if (obj.Result != null) Instantiate(obj.Result);
             if (SceneManager.GetActiveScene().name == "LoadScene") SceneTransition.Transition("GameScene");
         };
-    }
-    public void Init2()
-    {
-        adsManager.Init(configs.mockAdsConfig);
+
+        AdsManager.Init(configs.levelPlayAdsConfig);
     }
 }
