@@ -1,10 +1,12 @@
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 
 public class Core : MonoBehaviour
 {
     public static Core instance;
-    public Configs configs;
+    public static Configs configs;
     public AdsManager adsManager;
 
     private void Awake()
@@ -19,18 +21,24 @@ public class Core : MonoBehaviour
             Destroy(gameObject);
         }
 
-        Init();
+        Init2();
     }
-
-    public void Init()
+    public static void Init()
     {
-        InitConfigs();
-        adsManager.Init(configs.mockAdsConfig);
-    }
+        GameObject go = new GameObject("Sleeper");
+        go.AddComponent<Sleeper>();
 
-    public static void InitConfigs()
-    {
         TextAsset configAsset = Resources.Load<TextAsset>("configs/config.default");
-        instance.configs = JsonConvert.DeserializeObject<Configs>(configAsset.text);
+        configs = JsonConvert.DeserializeObject<Configs>(configAsset.text);
+
+        Addressables.LoadAssetAsync<GameObject>("ShineCore").Completed += (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj) =>
+        {
+            if (obj.Result != null) Instantiate(obj.Result);
+            if (SceneManager.GetActiveScene().name == "LoadScene") SceneTransition.Transition("GameScene");
+        };
+    }
+    public void Init2()
+    {
+        adsManager.Init(configs.mockAdsConfig);
     }
 }

@@ -28,7 +28,7 @@ public class LoadScene : MonoBehaviour
     [RuntimeInitializeOnLoadMethod]
     static void OnRuntimeInitialized()
     {
-        Addressables.LoadAssetAsync<GameObject>("ShineCore").Completed += OnLoadDone;
+        Core.Init();
     }
 #endif
 
@@ -37,19 +37,5 @@ public class LoadScene : MonoBehaviour
 #if !UNITY_EDITOR
         Addressables.LoadAssetAsync<GameObject>("ShineCore").Completed += LoadScene.OnLoadDone;
 #endif
-    }
-
-    private static void OnLoadDone(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj)
-    {
-        if (obj.Result != null)
-        {
-            Instantiate(obj.Result);
-        }
-
-        if (SceneManager.GetActiveScene().name == "LoadScene")
-        {
-            SceneTransition.Transition("GameScene");
-
-        }
     }
 }

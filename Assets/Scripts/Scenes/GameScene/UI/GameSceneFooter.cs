@@ -117,22 +117,17 @@ public class GameSceneFooter : MonoBehaviour
         {
             AdsManager.ShowRewardedAd((bool isRewarded) =>
             {
-                if (!isRewarded)
-                {
-                    return;
-                }
+                if (!isRewarded) return;
                 DataStorage.SetInt(Player.PlayerDataKey.HINT_COUNT, 1);
                 hintButton.ShowDotIcon();
                 hintButton.SetCountText(1);
             });
         }
-        // if (!gameScene.gameManager.gamePlay.IsCanUndo())
-        // {
-        //     return;
-        // }
 
-        // gameScene.gameManager.gamePlay.Undo();
-        DataStorage.SetInt(Player.PlayerDataKey.HINT_COUNT, Math.Max(0, DataStorage.GetInt(Player.PlayerDataKey.HINT_COUNT, 0) - 1));
+        if (gameScene.gameManager.ShowHint())
+        {
+            DataStorage.SetInt(Player.PlayerDataKey.HINT_COUNT, Math.Max(0, DataStorage.GetInt(Player.PlayerDataKey.HINT_COUNT, 0) - 1));
+        }
     }
 
     public float GetHeight()

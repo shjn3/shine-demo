@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class InputManager
 {
     public Action<Vector3> pointerDownLeftCallback = (position) => { };
 
-    void Update()
+    public void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {

@@ -118,14 +118,14 @@ public class LevelFailedScreen : BaseScreen
         ribbon.transform.DOScale(1, 1f).SetEase(Ease.OutElastic);
 
 
-        Sleeper.instance.WaitForSeconds(0.1f).Then(() =>
+        Sleeper.WaitForSeconds(0.1f).Then(() =>
         {
             levelText.transform.DOMove(levelTextOriginalPosition, 0.5f).SetEase(Ease.OutBack);
             levelText.DOFade(1, 0.5f).SetEase(Ease.OutCubic);
             levelText.transform.DOScale(1, 1f).SetEase(Ease.OutElastic);
         });
 
-        Sleeper.instance.WaitForSeconds(0.2f).Then(() =>
+        Sleeper.WaitForSeconds(0.2f).Then(() =>
         {
             footer.transform.DOMove(footerOriginalPosition, 0.5f).SetEase(Ease.OutBack);
             footer.DOFade(1, 0.5f).SetEase(Ease.OutCubic);

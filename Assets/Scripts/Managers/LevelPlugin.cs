@@ -20,16 +20,16 @@ public class LevelPlugin
         //
     }
 
-    public bool LoadLevel(int level)
+    private LevelData LoadLevel(int level)
     {
         if (levelDataByLevel.ContainsKey(level))
         {
-            return true;
+            return levelDataByLevel[level];
         }
         string path = "levels/level_" + level.ToString("D5");
         TextAsset myAsset = Resources.Load<TextAsset>(path);
         levelDataByLevel.Add(level, JsonConvert.DeserializeObject<LevelData>(myAsset.text));
-        return false;
+        return levelDataByLevel[level];
     }
 
     public LevelData GetLevelData(int level)
@@ -39,6 +39,6 @@ public class LevelPlugin
             return levelDataByLevel[level];
         }
 
-        return null;
+        return LoadLevel(level);
     }
 }

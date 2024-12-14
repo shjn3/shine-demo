@@ -93,7 +93,7 @@ public class AdsManager : MonoBehaviour
         ads?.OnApplicationPause(isPaused);
     }
 
-    static void ShowNotify(string message, float duration = -1, bool isShowLoading = false)
+    public static void ShowNotify(string message, float duration = -1, bool isShowLoading = false)
     {
         NotifyScreen screen = ScreenManager.GetScreen<NotifyScreen>();
         if (screen == null)

@@ -4,23 +4,29 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    public InputManager inputManager;
+    public GameScene gameScene;
     public GamePlay gamePlay;
+    public InputManager inputManager = new InputManager();
     public LevelPlugin levelPlugin = new LevelPlugin();
+    private SuggestionManager suggestionManager = new SuggestionManager();
+    void Awake()
+    {
+        Init();
+    }
+    public void Init()
+    {
+        suggestionManager.SetGameManager(this);
+        suggestionManager.SetGuide(gameScene.guide);
+    }
+
+    public void Update()
+    {
+        inputManager?.Update();
+    }
 
     public void Retry()
     {
         gamePlay.Retry();
-    }
-
-    public bool IsWin()
-    {
-        return gamePlay.IsWin();
-    }
-
-    public bool IsLose()
-    {
-        return gamePlay.IsLose();
     }
 
     public void UpdateRatioScale(float remainingTopAreaHeight = GameSceneConfig.HEIGHT / 2, float remainingBottomAreaHeight = GameSceneConfig.HEIGHT / 2)
@@ -33,5 +39,10 @@ public class GameManager : MonoBehaviour
 
         float scaleRatio = Mathf.Max(0, Mathf.Min(scaleTop, scaleBottom));
         gamePlay.UpdateRatio(scaleRatio * ratio);
+    }
+
+    public bool ShowHint()
+    {
+        return suggestionManager.ShowHint();
     }
 }

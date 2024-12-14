@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using DG.Tweening.Plugins;
 using UnityEngine;
 
 public class Tube : MonoBehaviour
@@ -154,17 +155,17 @@ public class Tube : MonoBehaviour
         return Math.Abs((GetTopPosition().y - GetBallPositionY(idx)) / (GetTopPosition().y - GetBallPositionY(0)));
     }
 
-    public bool AreAllBallsValid()
+    public bool IsCanReceiveBalls()
     {
-        if (GetMatchingBalls() == TubeConfig.VOLUME)
-        {
-            return true;
-        }
-
-        return false;
+        return GetEmptyVolume() > 0;
     }
 
-    public Ball[] getLastBalls(int maxCount = 0)
+    public bool IsCanGiveBalls()
+    {
+        return this.ballStack.Count > 0;
+    }
+
+    public Ball[] GetLastBalls(int maxCount = 0)
     {
         List<Ball> balls = new();
         string color = GetLastColor();
@@ -177,5 +178,36 @@ public class Tube : MonoBehaviour
         }
 
         return balls.ToArray();
+    }
+
+    public int GetLastBallsCount()
+    {
+        int count = 0;
+        string color = GetLastColor();
+
+        foreach (var ball in ballStack)
+        {
+            if (ball.color != color)
+                break;
+            count++;
+        }
+
+        return count;
+    }
+
+    public Vector3 GetLastBallWorldPosition()
+    {
+        return transform.TransformPoint(new Vector3(0, GetBallPositionY(Math.Max(0, ballStack.Count - 1)), 0));
+    }
+    public string[] GetColors()
+    {
+        List<string> colors = new();
+
+        foreach (var b in ballStack.Reverse())
+        {
+            colors.Add(b.color);
+        }
+
+        return colors.ToArray();
     }
 }

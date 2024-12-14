@@ -14,15 +14,21 @@ public class Sleeper : MonoBehaviour
         {
             Destroy(instance);
         }
-
         instance = this;
+
+        DontDestroyOnLoad(this);
     }
 
-    public Promise WaitForSeconds(float seconds)
+    public static Promise WaitForSeconds(float seconds)
     {
+        if (instance == null)
+        {
+            return new Promise();
+        }
+
         return new Promise(resolve =>
         {
-            StartCoroutine(SleepAsync(seconds, resolve));
+            instance.StartCoroutine(instance.SleepAsync(seconds, resolve));
         });
     }
 

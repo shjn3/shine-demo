@@ -8,7 +8,6 @@ public class Ball : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
-
     public Tube tube;
     public int idx = 0;
     public string color = "";
@@ -82,7 +81,7 @@ public class Ball : MonoBehaviour
         Drop(transform.localPosition, to, duration, delay, () => { });
     }
 
-    public void Drop(Vector3 from, Vector3 to, float duration, float delay, Action onCompeted)
+    public void Drop(Vector3 from, Vector3 to, float duration, float delay, Action onCompeted = null)
     {
         Vector3 position = from;
         int bounceTime = BallConfig.BOUNCE_COUNT;
@@ -113,7 +112,7 @@ public class Ball : MonoBehaviour
             .OnComplete(() =>
             {
                 SoundManager.Play(SoundKey.BOUND, 0.2f);
-                onCompeted.Invoke();
+                onCompeted?.Invoke();
             });
     }
 

@@ -16,12 +16,11 @@ public class SceneTransition : MonoBehaviour
         else
         {
             Destroy(instance);
-            instance = this;
         }
     }
+
     [SerializeField]
     private Animator transitionAnim;
-
     public static Promise Transition(string sceneName, float delay = 0)
     {
         if (instance == null)
@@ -31,12 +30,12 @@ public class SceneTransition : MonoBehaviour
         return new Promise(resolve =>
         {
             instance.transitionAnim.Play("FadeIn");
-            Sleeper.instance.WaitForSeconds(0.15f).Then(() =>
+            Sleeper.WaitForSeconds(0.15f).Then(() =>
             {
                 SceneManager.LoadScene(sceneName);
                 instance.transitionAnim.Play("FadeOut");
 
-                Sleeper.instance.WaitForSeconds(0.15f).Then(() =>
+                Sleeper.WaitForSeconds(0.15f).Then(() =>
                 {
                     resolve();
                 });
