@@ -7,8 +7,8 @@ public class GameSceneHeader : MonoBehaviour
 {
     public GameScene gameScene;
     public Text levelText;
-    public Button pauseButton;
-    public Button retryButton;
+    public BaseButton pauseButton;
+    public BaseButton retryButton;
     public SafeArea safeArea;
 
     void Awake()
@@ -38,7 +38,7 @@ public class GameSceneHeader : MonoBehaviour
 
     public void OnPauseButtonClick()
     {
-        gameScene.gameManager.gamePlay.Pause();
+        gameScene.gameManager.gamePlay.SetStatusPause();
         SettingsScreen screen = ScreenManager.GetScreen<SettingsScreen>();
         if (screen == null)
         {
@@ -46,7 +46,7 @@ public class GameSceneHeader : MonoBehaviour
         }
         screen.onceClose += () =>
         {
-            gameScene.gameManager.gamePlay.Continue();
+            gameScene.gameManager.gamePlay.SetStatusReady();
         };
         ScreenManager.OpenScreen(ScreenKey.SETTINGS_SCREEN);
     }
@@ -55,5 +55,11 @@ public class GameSceneHeader : MonoBehaviour
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         return math.abs(rectTransform.anchoredPosition.y) + rectTransform.sizeDelta.y / 2;
+    }
+
+    public void SetDisableButtons(bool isDisabled)
+    {
+        this.pauseButton.SetDisable(isDisabled);
+        this.retryButton.SetDisable(isDisabled);
     }
 }

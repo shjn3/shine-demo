@@ -132,8 +132,14 @@ public class Tube : MonoBehaviour
             return;
         }
         Vector3 to = GetTopPosition();
-        Ball ball = ballStack.Peek();
-        ball.MoveTo(to, 0.3f * CalculateDuration(ball.idx));
+        Ball[] balls = GetLastBalls();
+
+        foreach (var ball in balls)
+        {
+            ball.PlayHighlightAnimation(to);
+            to.y -= BallConfig.HEIGHT;
+        }
+
         SoundManager.Play(SoundKey.HIGHLIGHT);
         Debug.Log("Select " + ballStack.Count);
     }
@@ -145,9 +151,13 @@ public class Tube : MonoBehaviour
             return;
         }
         SoundManager.Play(SoundKey.UN_HIGHLIGHT);
-        Vector3 to = new(0, GetBallPositionY(ballStack.Count - 1), 0);
-        Ball ball = ballStack.Peek();
-        ball.Drop(to, CalculateDuration(ball.idx));
+
+        Ball[] balls = GetLastBalls();
+        foreach (var ball in balls)
+        {
+            Vector3 to = new(0, GetBallPositionY(ball.idx), 0);
+            ball.PlayUnHighlightAnimation(to);
+        }
         Debug.Log("Un Select " + ballStack.Count);
     }
 
@@ -181,7 +191,7 @@ public class Tube : MonoBehaviour
         return balls.ToArray();
     }
 
-    public int GetLastBallsCount()
+    public int GetLastBallCount()
     {
         int count = 0;
         string color = GetLastColor();
@@ -195,6 +205,12 @@ public class Tube : MonoBehaviour
 
         return count;
     }
+
+    public int GetBallCount()
+    {
+        return this.ballStack.Count;
+    }
+
 
     public Vector3 GetLastBallWorldPosition()
     {

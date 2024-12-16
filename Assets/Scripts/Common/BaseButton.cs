@@ -18,9 +18,9 @@ public class BaseButton : MonoBehaviour
         SoundManager.Play(SoundKey.BUTTON_CLICK, 1);
     }
 
-    public void SetDisable()
+    public void SetDisable(bool isDisabled)
     {
-        if (button != null) button.interactable = false;
+        if (button != null) button.interactable = isDisabled;
 
     }
 

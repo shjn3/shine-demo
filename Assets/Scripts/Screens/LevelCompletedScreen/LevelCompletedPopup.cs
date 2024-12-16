@@ -6,6 +6,9 @@ public class LevelCompletedPopup : Popup
 {
     public Image cupImage;
     public Text levelText;
+    public ParticleSystem leftConfettiParticle;
+    public ParticleSystem rightConfettiParticle;
+
     public CanvasGroup nextLevelButtonCanvasGroup;
     private Vector3 cupImageOriginalPosition;
     private Vector3 levelTextOriginalPosition;
@@ -23,6 +26,8 @@ public class LevelCompletedPopup : Popup
         level = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
         levelText.text = "Level " + level;
         RunOpenAnimation();
+        leftConfettiParticle.Play();
+        rightConfettiParticle.Play();
     }
 
     public void RunOpenAnimation()

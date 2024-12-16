@@ -1,17 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelMapScroller : ReuseScroller<LevelMapScrollerItemData>
 {
-    protected override void Start()
+    public void GenerateLevelMapItems()
     {
-        base.Start();
         int column = 4;
-        int maxLevel = 200;
+        int maxLevel = Core.configs.levelMax;
         List<LevelMapScrollerItemData> levelItemsData = new();
-        int currentLevel = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
+        // int currentLevel = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
+        int currentLevel = UnityEngine.Random.Range(20, 50);
+
 
         for (int i = 0; i < maxLevel; i += column)
         {
