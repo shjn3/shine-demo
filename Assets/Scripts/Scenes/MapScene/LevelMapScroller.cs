@@ -9,9 +9,7 @@ public class LevelMapScroller : ReuseScroller<LevelMapScrollerItemData>
         int column = 4;
         int maxLevel = Core.configs.levelMax;
         List<LevelMapScrollerItemData> levelItemsData = new();
-        // int currentLevel = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
-        int currentLevel = UnityEngine.Random.Range(20, 50);
-
+        int currentLevel = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
 
         for (int i = 0; i < maxLevel; i += column)
         {

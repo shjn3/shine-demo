@@ -130,6 +130,15 @@ public class GamePlay : MonoBehaviour
     void BuildLevel(int level)
     {
         levelData = gameManager.levelPlugin.GetLevelData(level);
+        GameHistoryData historyData = GameHistoryManager.Get();
+        if (historyData != null)
+        {
+            if (levelData.level == historyData.level)
+            {
+                levelData.bottleList = historyData.bottleList.Select(i => new List<string>(i)).ToList();
+                moveStack = new Stack<BallsMove>(historyData.moves);
+            }
+        }
         BuildLevel(levelData);
     }
 
@@ -418,11 +427,7 @@ public class GamePlay : MonoBehaviour
 
     public GameStateData GetGameStateData()
     {
-        string[][] bottleList = new string[tubes.Count][];
-        for (int i = 0; i < tubes.Count; i++)
-            bottleList[i] = tubes[i].GetColors();
-
-
+        string[][] bottleList = GetBottleList();
         GameStateData data = new()
         {
             coloredBottleCount = levelData.coloredBottleCount,
@@ -532,5 +537,31 @@ public class GamePlay : MonoBehaviour
             };
             RunSwapBallsAnimation(move, resolve, delay);
         });
+    }
+
+    private void OnDestroy()
+    {
+        SaveGamePlay();
+    }
+
+    private string[][] GetBottleList()
+    {
+        string[][] bottleList = new string[tubes.Count][];
+        for (int i = 0; i < tubes.Count; i++)
+            bottleList[i] = tubes[i].GetColors();
+
+        return bottleList;
+    }
+
+    public void SaveGamePlay()
+    {
+        GameHistoryData data = new GameHistoryData()
+        {
+            level = level,
+            bottleList = GetBottleList(),
+            moves = moveStack.ToArray(),
+        };
+
+        GameHistoryManager.Save(data);
     }
 }

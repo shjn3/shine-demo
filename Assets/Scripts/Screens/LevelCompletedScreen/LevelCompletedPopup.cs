@@ -19,12 +19,12 @@ public class LevelCompletedPopup : Popup
         levelTextOriginalPosition = levelText.transform.localPosition;
         nextLevelButtonOriginalPosition = nextLevelButtonCanvasGroup.transform.localPosition;
     }
-    private int level = 1;
+
     public override void Open()
     {
         base.Open();
-        level = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
-        levelText.text = "Level " + level;
+
+        levelText.text = "Level " + DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
         RunOpenAnimation();
         leftConfettiParticle.Play();
         rightConfettiParticle.Play();
@@ -52,7 +52,7 @@ public class LevelCompletedPopup : Popup
 
     public void OnNextLevelButtonClick()
     {
-        DataStorage.SetInt(Player.PlayerDataKey.LEVEL, level + 1);
+
         ScreenManager.CloseScreen(ScreenKey.LEVEL_COMPLETED_SCREEN);
         SceneTransition.Transition("GameScene");
     }

@@ -41,27 +41,67 @@ public class AdsManager
 
     public static void ShowInterstitialAd(Action<bool> callback)
     {
+        NotifyScreen screen = ScreenManager.GetScreen<NotifyScreen>();
+
         if (!HasAds())
         {
-            ShowNotifyScreen("Load Interstitial ad failed!", 3);
-            callback.Invoke(false);
+            screen.onceClose += () =>
+            {
+                callback.Invoke(false);
+            };
+            ShowNotifyScreen("No ads available!", 3);
             return;
         }
 
-        instance.ads.ShowInterstitialAd(callback);
+        ShowNotifyScreen("", -1, true);
+        instance.ads.ShowInterstitialAd((isShowed) =>
+        {
+            screen.onceClose += () =>
+            {
+                if (isShowed == false)
+                {
+                    screen.onceClose += () => { callback.Invoke(isShowed); };
+                    ShowNotifyScreen("Show interstitial ads failed!");
+                    return;
+                }
+
+                callback.Invoke(isShowed);
+            };
+
+            ScreenManager.CloseScreen(ScreenKey.NOTIFY_SCREEN);
+        });
     }
 
     public static void ShowRewardedAd(Action<bool> callback)
     {
-        Debug.Log("Instance: " + instance);
+        NotifyScreen screen = ScreenManager.GetScreen<NotifyScreen>();
         if (!HasAds())
         {
-            ShowNotifyScreen("Load rewarded failed!", 3);
-            callback.Invoke(false);
+            screen.onceClose += () =>
+            {
+                callback.Invoke(false);
+            };
+            ShowNotifyScreen("No ads available!", 3);
             return;
         }
 
-        instance.ads.ShowRewardedAd(callback);
+        ShowNotifyScreen("", -1, true);
+        instance.ads.ShowRewardedAd(isShowed =>
+        {
+            screen.onceClose += () =>
+            {
+                if (isShowed == false)
+                {
+                    screen.onceClose += () => { callback.Invoke(isShowed); };
+                    ShowNotifyScreen("Show rewarded ads failed!");
+                    return;
+                }
+
+                callback.Invoke(isShowed);
+
+            };
+            ScreenManager.CloseScreen(ScreenKey.NOTIFY_SCREEN);
+        });
     }
 
     void OnApplicationPause(bool isPaused)

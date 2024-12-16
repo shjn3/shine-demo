@@ -20,12 +20,6 @@ public class BaseButton : MonoBehaviour
 
     public void SetDisable(bool isDisabled)
     {
-        if (button != null) button.interactable = isDisabled;
-
-    }
-
-    public void SetEnable()
-    {
-        if (button != null) button.interactable = true;
+        if (button != null) button.interactable = !isDisabled;
     }
 }

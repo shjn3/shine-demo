@@ -102,8 +102,10 @@ public class GameSceneFooter : MonoBehaviour
 
     public void OnAddTubeButtonClick()
     {
+        this.addTubeButton.SetDisable(true);
         AdsManager.ShowRewardedAd((isRewarded) =>
         {
+            this.addTubeButton.SetDisable(false);
             if (isRewarded)
             {
                 this.gameScene.gameManager.gamePlay.AddTube();

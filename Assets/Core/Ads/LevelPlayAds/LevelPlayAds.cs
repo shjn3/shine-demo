@@ -42,7 +42,6 @@ public class LevelPlayAds : Ads
     {
         if (rewardedAd == null)
         {
-            AdsManager.ShowNotifyScreen("Load rewarded ad failed!", 3);
             callback.Invoke(false);
             return;
         }
@@ -70,7 +69,6 @@ public class LevelPlayAds : Ads
     {
         if (interstitialAd == null)
         {
-            AdsManager.ShowNotifyScreen("Load Interstitial ad failed!", 3);
             callback.Invoke(false);
             return;
         }

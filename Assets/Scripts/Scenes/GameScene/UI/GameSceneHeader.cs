@@ -32,7 +32,12 @@ public class GameSceneHeader : MonoBehaviour
 
     public void OnRetryButtonClick()
     {
-        gameScene.gameManager.Retry();
+        gameScene.SetDisableButtons(true);
+        AdsManager.ShowInterstitialAd((isShowed) =>
+        {
+            gameScene.SetDisableButtons(false);
+            gameScene.gameManager.Retry();
+        });
     }
 
 
