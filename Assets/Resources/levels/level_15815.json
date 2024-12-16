@@ -1,0 +1,82 @@
+{
+  "level": 15815,
+  "coloredBottleCount": 12,
+  "emptyBottleCount": 1,
+  "bottleVolume": 4,
+  "bottleList": [
+    [
+      "green",
+      "teal",
+      "green",
+      "pink"
+    ],
+    [
+      "purple",
+      "red",
+      "yellow",
+      "yellow"
+    ],
+    [
+      "lime",
+      "blueGrey",
+      "blueGrey",
+      "pink"
+    ],
+    [
+      "brown",
+      "teal",
+      "brown",
+      "pink"
+    ],
+    [
+      "orange",
+      "red",
+      "orange",
+      "yellow"
+    ],
+    [
+      "red",
+      "blue",
+      "blue",
+      "yellow"
+    ],
+    [
+      "purple",
+      "purple",
+      "blue",
+      "purple"
+    ],
+    [
+      "blueGrey",
+      "brown",
+      "teal",
+      "pink"
+    ],
+    [],
+    [
+      "mahogany",
+      "mahogany",
+      "lime",
+      "mahogany"
+    ],
+    [
+      "blue",
+      "orange",
+      "red",
+      "orange"
+    ],
+    [
+      "teal",
+      "green",
+      "brown",
+      "green"
+    ],
+    [
+      "mahogany",
+      "lime",
+      "lime",
+      "blueGrey"
+    ]
+  ],
+  "solution": []
+}

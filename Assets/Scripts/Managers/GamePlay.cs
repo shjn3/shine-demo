@@ -106,7 +106,7 @@ public class GamePlay : MonoBehaviour
 
         if (!IsSwapBalls(selectedTube, toTube)) return;
 
-        SwapBall(selectedTube, toTube, () =>
+        SwapBalls(selectedTube, toTube, () =>
         {
             CheckGameState();
         });
@@ -207,7 +207,7 @@ public class GamePlay : MonoBehaviour
     bool SwapBall(int fromIdx, int toIdx, Action callback)
     {
         if (!IsSwapBalls(fromIdx, toIdx)) return false;
-        return SwapBall(this.tubes[fromIdx], this.tubes[toIdx], callback);
+        return SwapBalls(this.tubes[fromIdx], this.tubes[toIdx], callback);
     }
 
     bool IsValidTubeIdx(int idx)
@@ -215,7 +215,7 @@ public class GamePlay : MonoBehaviour
         return idx >= 0 && idx < this.tubes.Count;
     }
 
-    bool SwapBall(Tube from, Tube to, Action callback)
+    bool SwapBalls(Tube from, Tube to, Action callback)
     {
         if (!IsSwapBalls(from, to)) return false;
         if (from.GetLastBallsCount() == 0) return false;
@@ -235,7 +235,11 @@ public class GamePlay : MonoBehaviour
             callback.Invoke();
             to.AlignBallsPosition();
             from.AlignBallsPosition();
-            if (to.GetLastBallsCount() == levelData.bottleVolume) SoundManager.Play(SoundKey.CONFETTI);
+            if (to.GetLastBallsCount() == levelData.bottleVolume)
+            {
+                to.RunConfettiParticle();
+                SoundManager.Play(SoundKey.CONFETTI);
+            }
         };
 
         //Save move history

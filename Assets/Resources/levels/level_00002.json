@@ -1,204 +1,52 @@
 {
-  "coloredBottleCount": 8,
-  "emptyBottleCount": 2,
+  "coloredBottleCount": 2,
+  "emptyBottleCount": 1,
   "bottleVolume": 4,
   "bottleList": [
     [
-      "red",
-      "red",
-      "yellow",
-      "orange"
-    ],
-    [
-      "yellow",
-      "red",
-      "yellow",
-      "brown"
-    ],
-    [
-      "green",
-      "blueGrey",
-      "green",
-      "blueGrey"
-    ],
-    [
-      "green",
-      "blueGrey",
-      "teal",
+      "pink",
       "pink"
     ],
-    [],
     [
-      "blueGrey",
-      "teal",
-      "pink",
-      "brown"
+      "blue",
+      "blue",
+      "blue"
     ],
     [
       "pink",
-      "orange",
-      "red",
-      "orange"
-    ],
-    [],
-    [
-      "teal",
-      "brown",
-      "orange",
-      "yellow"
-    ],
-    [
-      "green",
-      "teal",
       "pink",
-      "brown"
+      "blue"
     ]
   ],
   "solution": [
     [
-      0,
-      4
-    ],
-    [
-      1,
-      7
-    ],
-    [
       1,
       0
     ],
     [
-      6,
-      4
+      2,
+      1
+    ],
+    [
+      2,
+      0
     ],
     [
       1,
-      6
-    ],
-    [
-      0,
-      1
-    ],
-    [
-      0,
-      1
-    ],
-    [
-      6,
-      0
-    ],
-    [
-      6,
-      0
-    ],
-    [
-      4,
-      6
-    ],
-    [
-      8,
-      1
-    ],
-    [
-      6,
-      8
-    ],
-    [
-      8,
-      4
-    ],
-    [
-      6,
-      8
-    ],
-    [
-      8,
-      4
-    ],
-    [
-      8,
-      4
-    ],
-    [
-      8,
-      7
-    ],
-    [
-      5,
-      7
-    ],
-    [
-      9,
-      7
-    ],
-    [
-      5,
-      9
-    ],
-    [
-      9,
-      6
-    ],
-    [
-      9,
-      6
-    ],
-    [
-      3,
-      6
-    ],
-    [
-      5,
-      9
-    ],
-    [
-      9,
-      3
-    ],
-    [
-      3,
-      8
-    ],
-    [
-      9,
-      3
-    ],
-    [
-      3,
-      8
-    ],
-    [
-      3,
-      8
-    ],
-    [
-      3,
-      5
-    ],
-    [
-      2,
-      5
-    ],
-    [
-      2,
-      9
-    ],
-    [
-      2,
-      5
-    ],
-    [
-      3,
       2
     ],
     [
-      2,
-      9
+      1,
+      2
     ],
     [
-      2,
-      9
+      1,
+      0
+    ],
+    [
+      1,
+      0
     ]
   ],
-  "level": 11
+  "level": 2
 }
