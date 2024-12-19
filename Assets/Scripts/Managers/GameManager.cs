@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        inputManager?.Update();
+        // inputManager?.Update();
     }
 
     public void Retry()
