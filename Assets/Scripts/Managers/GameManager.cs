@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public GameScene gameScene;
     public GamePlay gamePlay;
-    public InputManager inputManager = new InputManager();
+    // public InputManager inputManager = new InputManager();
     public LevelPlugin levelPlugin = new LevelPlugin();
     private SuggestionManager suggestionManager = new SuggestionManager();
     void Awake()

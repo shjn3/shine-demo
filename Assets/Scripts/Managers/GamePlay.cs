@@ -68,64 +68,64 @@ public class GamePlay : MonoBehaviour
     void Awake()
     {
         level = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
-        gameManager.inputManager.pointerDownLeftCallback += HandlePointerDown;
+        //  gameManager.inputManager.pointerDownLeftCallback += HandlePointerDown;
         BuildLevel(level);
     }
 
     void Destroy()
     {
-        gameManager.inputManager.pointerDownLeftCallback -= HandlePointerDown;
+        // gameManager.inputManager.pointerDownLeftCallback -= HandlePointerDown;
     }
 
-    void HandlePointerDown(Vector3 mousePosition)
-    {
-        if (state != GamePlayState.Ready) return;
-        Tube toTube = tubes.Find(tube => tube.boxCollider2D.OverlapPoint(mousePosition));
-        if (toTube == null)
-        {
-            return;
-        }
-        //Select
-        if (selectedTube == null)
-        {
-            if (toTube.IsCanGiveBalls() && toTube.GetLastBallCount() < levelData.bottleVolume)
-            {
-                toTube.Select();
-                selectedTube = toTube;
-            }
-            return;
-        }
+    // void HandlePointerDown(Vector3 mousePosition)
+    // {
+    //     if (state != GamePlayState.Ready) return;
+    //     Tube toTube = tubes.Find(tube => tube.boxCollider2D.OverlapPoint(mousePosition));
+    //     if (toTube == null)
+    //     {
+    //         return;
+    //     }
+    //     //Select
+    //     if (selectedTube == null)
+    //     {
+    //         if (toTube.IsCanGiveBalls() && toTube.GetLastBallCount() < levelData.bottleVolume)
+    //         {
+    //             toTube.Select();
+    //             selectedTube = toTube;
+    //         }
+    //         return;
+    //     }
 
-        //Unselected
-        if (selectedTube == toTube)
-        {
-            toTube.UnSelect();
-            selectedTube = null;
-            return;
-        }
+    //     //Unselected
+    //     if (selectedTube == toTube)
+    //     {
+    //         toTube.UnSelect();
+    //         selectedTube = null;
+    //         return;
+    //     }
 
-        if (!IsSwapBalls(selectedTube, toTube))
-        {
-            return;
-        }
+    //     if (!IsSwapBalls(selectedTube, toTube))
+    //     {
+    //         return;
+    //     }
 
-        SwapBall(selectedTube, toTube, () =>
-        {
-            if (CheckGameState()) return;
-            if (!IsCanPlayAuto())
-            {
-                SetStatusReady();
-                selectedTube = null;
-                return;
-            }
+    //     SwapBall(selectedTube, toTube, () =>
+    //     {
+    //         if (CheckGameState()) return;
+    //         if (!IsCanPlayAuto())
+    //         {
+    //             SetStatusReady();
+    //             selectedTube = null;
+    //             return;
+    //         }
 
-            PlayAuto().Then(() =>
-               {
-                   CheckGameState();
-               });
-            return;
-        });
-    }
+    //         PlayAuto().Then(() =>
+    //            {
+    //                CheckGameState();
+    //            });
+    //         return;
+    //     });
+    // }
 
     void BuildLevel(int level)
     {
@@ -157,12 +157,8 @@ public class GamePlay : MonoBehaviour
         tubes = new();
         //Generate new tubes
         for (int i = 0; i < levelData.bottleList.Count; i++)
-        {
-            Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform).GetComponent<Tube>();
-            tube.GenerateBalls(levelData.bottleList[i]);
-            tube.idx = i;
-            tubes.Add(tube);
-        }
+            tubes.Add(GenerateTube(this.levelData.bottleList[i].ToArray(), i));
+
         AlignTubes();
     }
 
@@ -390,10 +386,7 @@ public class GamePlay : MonoBehaviour
 
     public void AddTube()
     {
-        Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform).GetComponent<Tube>();
-        tube.idx = tubes.Count;
-
-        tubes.Add(tube);
+        tubes.Add(GenerateTube(Array.Empty<string>(), tubes.Count));
         AlignTubes();
     }
 
@@ -563,5 +556,60 @@ public class GamePlay : MonoBehaviour
         };
 
         GameHistoryManager.Save(data);
+    }
+
+    Tube GenerateTube(string[] colors, int idx = -1)
+    {
+        Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform).GetComponent<Tube>();
+        tube.GenerateBalls(colors);
+        tube.idx = idx;
+        tube.onClick += HandleTubeClicked;
+        return tube;
+    }
+
+    void HandleTubeClicked(Tube toTube)
+    {
+        if (state != GamePlayState.Ready) return;
+
+        //Select
+        if (selectedTube == null)
+        {
+            if (toTube.IsCanGiveBalls() && toTube.GetLastBallCount() < levelData.bottleVolume)
+            {
+                toTube.Select();
+                selectedTube = toTube;
+            }
+            return;
+        }
+
+        //Unselected
+        if (selectedTube == toTube)
+        {
+            toTube.UnSelect();
+            selectedTube = null;
+            return;
+        }
+
+        if (!IsSwapBalls(selectedTube, toTube))
+        {
+            return;
+        }
+
+        SwapBall(selectedTube, toTube, () =>
+        {
+            if (CheckGameState()) return;
+            if (!IsCanPlayAuto())
+            {
+                SetStatusReady();
+                selectedTube = null;
+                return;
+            }
+
+            PlayAuto().Then(() =>
+               {
+                   CheckGameState();
+               });
+            return;
+        });
     }
 }

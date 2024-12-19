@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4828137000358666547}
   - component: {fileID: 2154228645855803955}
   - component: {fileID: 992936018294328691}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,6 +159,14 @@ PrefabInstance:
     - target: {fileID: 3006762821237281516, guid: e077ba46ada88fa4594c44e0a3964b57, type: 3}
       propertyPath: m_Name
       value: ConfettiParticle
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006762821237281516, guid: e077ba46ada88fa4594c44e0a3964b57, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4046453418986312267, guid: e077ba46ada88fa4594c44e0a3964b57, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5784304365534076974, guid: e077ba46ada88fa4594c44e0a3964b57, type: 3}
       propertyPath: m_LocalPosition.x

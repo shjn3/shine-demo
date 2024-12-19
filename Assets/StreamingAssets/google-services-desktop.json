@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "179401380455",
+    "project_id": "ball-sort-bc38f",
+    "storage_bucket": "ball-sort-bc38f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179401380455:android:d5facdb9581641d71bbac2",
+        "android_client_info": {
+          "package_name": "com.Shine.BallSort"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATB5j3ncddBI89Bpe7SeUCAh-EzrHu3Dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
