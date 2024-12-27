@@ -41,9 +41,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: GameObject
+  - name: Tube
     uniqueID: 752382357
+    locked: 0
+  - name: BallOutsideTube
+    uniqueID: 3411337735
     locked: 0
   - name: UI
     uniqueID: 499760367
+    locked: 0
+  - name: Screen
+    uniqueID: 353837303
+    locked: 0
+  - name: MockAds
+    uniqueID: 3424712537
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 150761223
     locked: 0
