@@ -58,7 +58,6 @@ public class BaseScreen : MonoBehaviour
     {
         if (background == null)
         {
-            Debug.Log("background null");
             return new Promise();
         }
         return new Promise(resolve =>
@@ -80,8 +79,6 @@ public class BaseScreen : MonoBehaviour
     {
         if (background == null)
         {
-            Debug.Log("background null");
-
             return new Promise();
         }
         return new Promise(resolve =>

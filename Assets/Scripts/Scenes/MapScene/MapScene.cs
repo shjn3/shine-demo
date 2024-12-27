@@ -44,6 +44,10 @@ public class MapScene : MonoBehaviour
                 resolve();
             });
         });
+    }
 
+    public void OnDestroy()
+    {
+        DataStorage.SetBool("history.isUse", true);
     }
 }

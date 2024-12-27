@@ -1,6 +1,6 @@
 using System;
 
-public partial class Ads
+public abstract partial class Ads
 {
     public AdsConfig adsConfig;
     protected IBannerAd bannerAd;
@@ -40,15 +40,9 @@ public partial class Ads
         //
     }
 
-    public virtual void ShowRewardedAd(Action<bool> callback)
-    {
-        //
-    }
+    public abstract void ShowRewardedAd(Action<bool> callback);
 
-    public virtual void ShowInterstitialAd(Action<bool> callback)
-    {
-        //
-    }
+    public abstract void ShowInterstitialAd(Action<bool> callback);
 
     public virtual void HideBannerAd()
     {

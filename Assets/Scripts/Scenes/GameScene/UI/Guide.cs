@@ -19,7 +19,6 @@ public class Guide : MonoBehaviour
     {
         if (handImage == null)
         {
-            Debug.Log("handImage null");
             return new Promise();
         }
 
@@ -58,10 +57,14 @@ public class Guide : MonoBehaviour
 
             sequence.OnComplete(() =>
             {
-                this.handImage.gameObject.SetActive(false);
-                handImage.color = color;
-                handImage.transform.position = suggestion.fromWorldPosition;
-                handImage.transform.localScale = upScale;
+                if (!this.handImage.IsDestroyed())
+                {
+                    handImage.gameObject.SetActive(false);
+                    handImage.color = color;
+                    handImage.transform.position = suggestion.fromWorldPosition;
+                    handImage.transform.localScale = upScale;
+                }
+
                 resolve();
             });
         });

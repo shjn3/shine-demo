@@ -68,70 +68,16 @@ public class GamePlay : MonoBehaviour
     void Awake()
     {
         level = DataStorage.GetInt(Player.PlayerDataKey.LEVEL, 1);
-        //  gameManager.inputManager.pointerDownLeftCallback += HandlePointerDown;
         BuildLevel(level);
     }
-
-    void Destroy()
-    {
-        // gameManager.inputManager.pointerDownLeftCallback -= HandlePointerDown;
-    }
-
-    // void HandlePointerDown(Vector3 mousePosition)
-    // {
-    //     if (state != GamePlayState.Ready) return;
-    //     Tube toTube = tubes.Find(tube => tube.boxCollider2D.OverlapPoint(mousePosition));
-    //     if (toTube == null)
-    //     {
-    //         return;
-    //     }
-    //     //Select
-    //     if (selectedTube == null)
-    //     {
-    //         if (toTube.IsCanGiveBalls() && toTube.GetLastBallCount() < levelData.bottleVolume)
-    //         {
-    //             toTube.Select();
-    //             selectedTube = toTube;
-    //         }
-    //         return;
-    //     }
-
-    //     //Unselected
-    //     if (selectedTube == toTube)
-    //     {
-    //         toTube.UnSelect();
-    //         selectedTube = null;
-    //         return;
-    //     }
-
-    //     if (!IsSwapBalls(selectedTube, toTube))
-    //     {
-    //         return;
-    //     }
-
-    //     SwapBall(selectedTube, toTube, () =>
-    //     {
-    //         if (CheckGameState()) return;
-    //         if (!IsCanPlayAuto())
-    //         {
-    //             SetStatusReady();
-    //             selectedTube = null;
-    //             return;
-    //         }
-
-    //         PlayAuto().Then(() =>
-    //            {
-    //                CheckGameState();
-    //            });
-    //         return;
-    //     });
-    // }
 
     void BuildLevel(int level)
     {
         levelData = gameManager.levelPlugin.GetLevelData(level);
         GameHistoryData historyData = GameHistoryManager.Get();
-        if (historyData != null)
+        bool isUseHistoryData = DataStorage.GetBool("history.isUse");
+
+        if (historyData != null && isUseHistoryData)
         {
             if (levelData.level == historyData.level)
             {
@@ -284,6 +230,8 @@ public class GamePlay : MonoBehaviour
         Ball[] balls = new Ball[ballsMove.count];
         for (int i = ballsMove.count - 1; i >= 0; i--)
             balls[ballsMove.count - 1 - i] = lastBalls[i];
+        // for (int i = 0; i < balls.Length; i++)
+        //     balls[ballsMove.count - 1 - i] = lastBalls[i];
 
         for (int i = 0; i < ballsMove.count; i++)
         {
@@ -292,11 +240,11 @@ public class GamePlay : MonoBehaviour
 
             float duration = Vector3.Distance(fromTopPosition, to.transform.localPosition + Tube.GetTopPosition()) / 2f;
             duration *= 0.001f;
-
+            float durationMove2 = Math.Abs((fromTopPosition.y - ball.transform.localPosition.y) / (Tube.GetTopPosition().y - Tube.GetBallPositionY(0))) * 0.1f;
             var tempI = i;
             var promise = new Promise(resolve =>
              {
-                 ball.PlayMoveAnimation(fromTopPosition, 0.1f, delay + i * 0.02f).Then(() =>
+                 ball.PlayMoveAnimation(fromTopPosition, durationMove2, delay + i * 0.02f).Then(() =>
                  {
                      ball.spriteRenderer.sortingLayerName = "BallOutsideTube";
                      ball.PlayMoveAnimation(Tube.GetTopPosition(), duration).Then(() =>
@@ -316,8 +264,16 @@ public class GamePlay : MonoBehaviour
 
     public void Retry()
     {
+        if (!IsCanRetry())
+        {
+            return;
+        }
         Debug.Log("RETRY");
         SceneTransition.Transition("GameScene", 1);
+    }
+    public bool IsCanRetry()
+    {
+        return this.moveStack.Count != 0;
     }
 
     public void NextLevel()
@@ -399,7 +355,6 @@ public class GamePlay : MonoBehaviour
     {
         if (!IsCanUndo())
         {
-            Debug.Log("can't undo");
             return;
         }
 
@@ -556,6 +511,7 @@ public class GamePlay : MonoBehaviour
         };
 
         GameHistoryManager.Save(data);
+        DataStorage.SetBool("history.isUse", false);
     }
 
     Tube GenerateTube(string[] colors, int idx = -1)

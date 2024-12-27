@@ -38,6 +38,6 @@ public class Core : MonoBehaviour
         };
 
 
-        AdsManager.Init(configs.levelPlayAdsConfig);
+        AdsManager.Init(configs.mockAdsConfig);
     }
 }

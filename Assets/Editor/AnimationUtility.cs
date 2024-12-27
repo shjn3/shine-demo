@@ -45,7 +45,6 @@ public class AnimationUtility : EditorWindow
     {
         if (AssetDatabase.IsSubAsset(clip))
         {
-            Debug.Log("clip is sub asset");
             return;
         }
         var clipCopy = Object.Instantiate(clip) as AnimationClip;

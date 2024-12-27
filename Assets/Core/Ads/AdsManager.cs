@@ -114,7 +114,6 @@ public class AdsManager
         NotifyScreen screen = ScreenManager.GetScreen<NotifyScreen>();
         if (screen == null)
         {
-            Debug.Log("screen null");
             return;
         }
         screen.PassData(message, duration, isShowLoading);

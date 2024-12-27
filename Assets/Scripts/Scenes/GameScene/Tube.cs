@@ -149,7 +149,6 @@ public class Tube : MonoBehaviour, IPointerClickHandler
         }
 
         SoundManager.Play(SoundKey.HIGHLIGHT);
-        Debug.Log("Select " + ballStack.Count);
     }
 
     public void UnSelect()
@@ -166,7 +165,6 @@ public class Tube : MonoBehaviour, IPointerClickHandler
             Vector3 to = new(0, GetBallPositionY(ball.idx), 0);
             ball.PlayUnHighlightAnimation(to);
         }
-        Debug.Log("Un Select " + ballStack.Count);
     }
 
     public static float CalculateDuration(int idx)

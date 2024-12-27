@@ -127,7 +127,6 @@ public class ReuseScroller<T> : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     {
         if (items.Last.Value.idx == itemsData.Length - 1 || idx >= itemsData.Length || idx < 0)
         {
-            Debug.Log("Don't add last item!!");
             return;
         }
 
@@ -140,7 +139,6 @@ public class ReuseScroller<T> : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     {
         if (items.Count != 0 && items.First.Value.idx == 0 || idx >= itemsData.Length || idx < 0)
         {
-            Debug.Log("Don't add first item!!");
             return;
         }
 

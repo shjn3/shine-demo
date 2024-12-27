@@ -6,6 +6,7 @@ public class MockInterstitialAd : Ads.IInterstitialAd
     //
     public void ShowInterstitialAd(Action<bool> callback)
     {
+        UnityEngine.Debug.Log("call");
         AdsScreen screen = ScreenManager.GetScreen<AdsScreen>();
         screen.onceClose += () =>
         {

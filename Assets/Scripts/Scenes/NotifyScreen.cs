@@ -30,7 +30,6 @@ public class NotifyScreen : BaseScreen
     public override void OnOpen()
     {
         base.OnOpen();
-        Debug.Log("notify open");
         this.messageText.gameObject.SetActive(!string.IsNullOrEmpty(message));
         messageText.text = message;
         HideLoading();

@@ -1,4 +1,4 @@
-public partial class Ads
+public abstract partial class Ads
 {
     public class AdsConfig
     {
