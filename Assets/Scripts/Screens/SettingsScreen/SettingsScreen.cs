@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ShineCore;
@@ -38,6 +39,7 @@ public class SettingsScreen : BaseScreen
     public void OnMapButtonClick()
     {
         CloseScreen();
+
         SceneTransition.Transition("MapScene");
     }
 

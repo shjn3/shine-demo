@@ -18,14 +18,8 @@ public class BaseButton : MonoBehaviour
         SoundManager.Play(SoundKey.BUTTON_CLICK, 1);
     }
 
-    public void SetDisable()
+    public void SetDisable(bool isDisabled)
     {
-        if (button != null) button.interactable = false;
-
-    }
-
-    public void SetEnable()
-    {
-        if (button != null) button.interactable = true;
+        if (button != null) button.interactable = !isDisabled;
     }
 }

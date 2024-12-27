@@ -210,7 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -336,7 +336,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 52d0cab4fb48cc046934474099517b64, type: 3}
     - target: {fileID: 2259563946270334411, guid: 6be6bceb9143ec9488c8bc4e7b90f7ee, type: 3}
       propertyPath: m_Name
-      value: FooterButton Variant
+      value: FooterButton
       objectReference: {fileID: 0}
     - target: {fileID: 3721623772140555324, guid: 6be6bceb9143ec9488c8bc4e7b90f7ee, type: 3}
       propertyPath: m_IsActive

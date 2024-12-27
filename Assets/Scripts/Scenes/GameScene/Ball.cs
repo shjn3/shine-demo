@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using ShineCore;
 
 public class Ball : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class Ball : MonoBehaviour
     public Tube tube;
     public int idx = 0;
     public string color = "";
+    public float dropDownSpeed = 0.36f;
+    public float flySpeed = 1f;
+    public Tween highlightTween;
+    public Tween unHighlightTween;
+    public Tween moveTween;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,54 +80,74 @@ public class Ball : MonoBehaviour
     {
         this.tube = tube;
     }
-
-    public void Drop(Vector3 to, float duration = 1, float delay = 0)
+    private bool IsBallDirectionReversed(Vector3 fromPosition, Vector3 to, float delta)
     {
-        Vector3 position = transform.localPosition;
-        Drop(transform.localPosition, to, duration, delay, () => { });
+        return to.y < fromPosition.y ? delta > 0 : delta < 0;
     }
 
-    public void Drop(Vector3 from, Vector3 to, float duration, float delay, Action onCompeted = null)
+    public Promise PlayUnHighlightAnimation(Vector3 to)
     {
-        Vector3 position = from;
+        var fromPosition = Tube.GetTopPosition();
         int bounceTime = BallConfig.BOUNCE_COUNT;
         bool isAllowBounce = true;
-        float prevValue = from.y;
-        bool IsBallDirectionReversed(float delta) => to.y < from.y ? delta > 0 : delta < 0;
+        float prevValue = fromPosition.y;
 
-        DOVirtual.Float(from.y, to.y, duration, (value) =>
-            {
-                position.y = value;
-                transform.localPosition = position;
-                var delta = value - prevValue;
-                if (bounceTime > 0 && isAllowBounce)
-                {
-                    if (IsBallDirectionReversed(delta))
-                    {
-                        Debug.Log("Sound");
-                        SoundManager.Play(SoundKey.BOUND, bounceTime * 1f / BallConfig.BOUNCE_COUNT);
-                        isAllowBounce = false;
-                        bounceTime -= 1;
-                    }
-                }
-                else if (!IsBallDirectionReversed(delta)) isAllowBounce = true;
-                prevValue = value;
-            })
-            .SetEase(Ease.OutBounce)
-            .SetDelay(delay)
-            .OnComplete(() =>
-            {
-                SoundManager.Play(SoundKey.BOUND, 0.2f);
-                onCompeted?.Invoke();
-            });
+        return new Promise(resolve =>
+        {
+            float duration = Math.Abs((Tube.GetTopPosition().y - Tube.GetBallPositionY(idx)) / (Tube.GetTopPosition().y - Tube.GetBallPositionY(0))) * dropDownSpeed;
+            if (unHighlightTween != null && DOTween.IsTweening(unHighlightTween))
+                unHighlightTween.onComplete();
+            unHighlightTween = DOVirtual.Float(fromPosition.y, to.y, duration, (value) =>
+                              {
+                                  fromPosition.y = value;
+                                  transform.localPosition = fromPosition;
+                                  var delta = value - prevValue;
+                                  if (bounceTime > 0 && isAllowBounce)
+                                  {
+                                      if (IsBallDirectionReversed(fromPosition, to, delta))
+                                      {
+                                          SoundManager.Play(SoundKey.BOUND, bounceTime * 1f / BallConfig.BOUNCE_COUNT);
+                                          isAllowBounce = false;
+                                          bounceTime -= 1;
+                                      }
+                                  }
+                                  else if (!IsBallDirectionReversed(fromPosition, to, delta)) isAllowBounce = true;
+                                  prevValue = value;
+                              })
+
+                           .SetEase(Ease.OutBounce)
+                           .SetDelay(idx * 0.03f)
+                           .OnComplete(() =>
+                           {
+                               SoundManager.Play(SoundKey.BOUND, 0.2f);
+                               resolve();
+                           });
+        });
+
     }
 
-    public void MoveTo(Vector3 to, float duration = 0.3f, float delay = 0, Action onCompleted = null
-    )
+    public Promise PlayHighlightAnimation(Vector3 to, float delay = 0)
     {
-        transform.DOLocalMove(to, duration).SetEase(Ease.InOutSine).SetDelay(delay).OnComplete(() =>
+        return new Promise(resolve =>
         {
-            onCompleted?.Invoke();
+            if (highlightTween != null && DOTween.IsTweening(highlightTween))
+                highlightTween.onComplete();
+
+            highlightTween = transform.DOLocalMove(to, 0.1f).SetEase(Ease.InOutSine).SetDelay(delay).OnComplete(() =>
+            {
+                highlightTween = null;
+                resolve();
+            });
+        });
+    }
+
+    public Promise PlayMoveAnimation(Vector3 to, float duration = 0.3f, float delay = 0)
+    {
+        return new Promise(resolve =>
+        {
+            if (moveTween != null && DOTween.IsTweening(moveTween))
+                moveTween.onComplete();
+            moveTween = transform.DOLocalMove(to, duration).SetEase(Ease.Linear).SetDelay(delay).OnComplete(() => resolve());
         });
     }
 }

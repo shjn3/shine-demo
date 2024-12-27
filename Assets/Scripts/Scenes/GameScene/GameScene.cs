@@ -26,4 +26,10 @@ public class GameScene : MonoBehaviour
     {
 
     }
+
+    public void SetDisableButtons(bool isDisabled)
+    {
+        this.header.SetDisableButtons(isDisabled);
+        this.footer.SetDisableButtons(isDisabled);
+    }
 }

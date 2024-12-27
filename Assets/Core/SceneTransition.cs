@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Linq;
 using ShineCore;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
     public static SceneTransition instance;
+    [SerializeField]
+    private Canvas canvas;
     public void Awake()
     {
         if (instance == null)

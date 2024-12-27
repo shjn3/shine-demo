@@ -87,6 +87,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 619892338366823775}
+  - component: {fileID: 8521717642221920069}
   m_Layer: 0
   m_Name: GameScene
   m_TagString: Untagged
@@ -111,6 +112,22 @@ Transform:
   - {fileID: 7522936029632898019}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8521717642221920069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9007269187355360044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7989b65fc4b01a4b89febe3685e9844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 6126096275866110659}
+  footer: {fileID: 2960519661631780072}
+  header: {fileID: 8287781435525402137}
+  guide: {fileID: 0}
 --- !u!1001 &3264613972683370688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,9 +136,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 619892338366823775}
     m_Modifications:
+    - target: {fileID: 314088616870446120, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
+      propertyPath: gameScene
+      value: 
+      objectReference: {fileID: 8521717642221920069}
     - target: {fileID: 3263053260089780242, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
       propertyPath: m_Name
       value: UndoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316372924292449553, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
+      propertyPath: m_Name
+      value: RetryButton
       objectReference: {fileID: 0}
     - target: {fileID: 4983491825916449571, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
       propertyPath: m_Pivot.x
@@ -203,6 +228,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6794278526850711257, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
+      propertyPath: gameScene
+      value: 
+      objectReference: {fileID: 8521717642221920069}
     - target: {fileID: 8221628279599243293, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
       propertyPath: m_Name
       value: UI
@@ -212,8 +241,30 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
+--- !u!114 &2960519661631780072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 314088616870446120, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
+  m_PrefabInstance: {fileID: 3264613972683370688}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a70abeefc19ac84ca1bbe9f7e65ff7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7522936029632898019 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4983491825916449571, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
   m_PrefabInstance: {fileID: 3264613972683370688}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8287781435525402137 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6794278526850711257, guid: cd6eec6856b88524fbc5bdea8b6be67f, type: 3}
+  m_PrefabInstance: {fileID: 3264613972683370688}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59e166fc58b586c4a8ad3422549a449d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
+using System.Linq;
 public class LevelPlugin
 {
     public class LevelData
@@ -11,6 +13,19 @@ public class LevelPlugin
         public int bottleVolume;
         public List<List<string>> bottleList;
         public List<List<int>> solution;
+        public LevelData()
+        {
+            //
+        }
+        public LevelData(LevelData lData)
+        {
+            level = lData.level;
+            coloredBottleCount = lData.coloredBottleCount;
+            emptyBottleCount = lData.emptyBottleCount;
+            bottleVolume = lData.bottleVolume;
+            solution = lData.solution.Select(i => new List<int>(i)).ToList();
+            bottleList = lData.bottleList.Select(i => new List<string>(i)).ToList();
+        }
     }
 
     private Dictionary<int, LevelData> levelDataByLevel = new Dictionary<int, LevelData>();

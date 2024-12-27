@@ -102,8 +102,10 @@ public class GameSceneFooter : MonoBehaviour
 
     public void OnAddTubeButtonClick()
     {
+        this.addTubeButton.SetDisable(true);
         AdsManager.ShowRewardedAd((isRewarded) =>
         {
+            this.addTubeButton.SetDisable(false);
             if (isRewarded)
             {
                 this.gameScene.gameManager.gamePlay.AddTube();
@@ -113,7 +115,7 @@ public class GameSceneFooter : MonoBehaviour
 
     public void OnHintButtonClick()
     {
-        this.hintButton.SetDisable();
+        this.hintButton.SetDisable(true);
         if (DataStorage.GetInt(Player.PlayerDataKey.HINT_COUNT, 0) == 0)
         {
             AdsManager.ShowRewardedAd((bool isRewarded) =>
@@ -126,7 +128,7 @@ public class GameSceneFooter : MonoBehaviour
         }
         Action onCompleted = () =>
         {
-            hintButton.SetEnable();
+            hintButton.SetDisable(false);
         };
 
         Action<bool> onStarted = (bool isCanShow) =>
@@ -151,5 +153,12 @@ public class GameSceneFooter : MonoBehaviour
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         return rectTransform.anchoredPosition.y + rectTransform.sizeDelta.y / 2;
+    }
+
+    public void SetDisableButtons(bool isDisabled)
+    {
+        this.hintButton.SetDisable(isDisabled);
+        this.undoButton.SetDisable(isDisabled);
+        this.addTubeButton.SetDisable(isDisabled);
     }
 }

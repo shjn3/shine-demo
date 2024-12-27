@@ -5,15 +5,21 @@ using System.Linq;
 using DG.Tweening;
 using DG.Tweening.Plugins;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Tube : MonoBehaviour
+public class Tube : MonoBehaviour, IPointerClickHandler
 {
     private Stack<Ball> ballStack = new();
     public BoxCollider2D boxCollider2D;
-    public bool isSelected = false;
+    [SerializeField]
+    private ParticleSystem confettiParticle;
+    [HideInInspector]
     public int idx;
     [SerializeField]
     private GameObject ballPrefab;
+
+    public event Action<Tube> onClick = (tube) => { };
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,17 +54,22 @@ public class Tube : MonoBehaviour
         return ball;
     }
 
-
-    public void GenerateBalls(List<string> colours)
+    public void GenerateBalls(string[] colors)
     {
-        foreach (var colour in colours)
+        if (colors == null || colors.Length == 0)
+        {
+            return;
+        }
+
+        foreach (var color in colors)
         {
             GameObject ballObject = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
-            ballObject.GetComponent<Ball>().SetColor(colour);
+            ballObject.GetComponent<Ball>().SetColor(color);
             PushBall(ballObject.GetComponent<Ball>());
         }
         AlignBallsPosition();
     }
+
     public string GetLastColor()
     {
         if (IsEmpty())
@@ -129,9 +140,14 @@ public class Tube : MonoBehaviour
             return;
         }
         Vector3 to = GetTopPosition();
-        Ball ball = ballStack.Peek();
-        ball.MoveTo(to, 0.3f * CalculateDuration(ball.idx));
-        isSelected = true;
+        Ball[] balls = GetLastBalls();
+
+        foreach (var ball in balls)
+        {
+            ball.PlayHighlightAnimation(to);
+            to.y -= BallConfig.HEIGHT;
+        }
+
         SoundManager.Play(SoundKey.HIGHLIGHT);
         Debug.Log("Select " + ballStack.Count);
     }
@@ -143,10 +159,13 @@ public class Tube : MonoBehaviour
             return;
         }
         SoundManager.Play(SoundKey.UN_HIGHLIGHT);
-        Vector3 to = new(0, GetBallPositionY(ballStack.Count - 1), 0);
-        Ball ball = ballStack.Peek();
-        ball.Drop(to, CalculateDuration(ball.idx));
-        isSelected = false;
+
+        Ball[] balls = GetLastBalls();
+        foreach (var ball in balls)
+        {
+            Vector3 to = new(0, GetBallPositionY(ball.idx), 0);
+            ball.PlayUnHighlightAnimation(to);
+        }
         Debug.Log("Un Select " + ballStack.Count);
     }
 
@@ -180,7 +199,7 @@ public class Tube : MonoBehaviour
         return balls.ToArray();
     }
 
-    public int GetLastBallsCount()
+    public int GetLastBallCount()
     {
         int count = 0;
         string color = GetLastColor();
@@ -195,10 +214,17 @@ public class Tube : MonoBehaviour
         return count;
     }
 
+    public int GetBallCount()
+    {
+        return this.ballStack.Count;
+    }
+
+
     public Vector3 GetLastBallWorldPosition()
     {
         return transform.TransformPoint(new Vector3(0, GetBallPositionY(Math.Max(0, ballStack.Count - 1)), 0));
     }
+
     public string[] GetColors()
     {
         List<string> colors = new();
@@ -209,5 +235,20 @@ public class Tube : MonoBehaviour
         }
 
         return colors.ToArray();
+    }
+
+    public void RunConfettiParticle()
+    {
+        this.confettiParticle.Play();
+    }
+
+    public void StopConfettiParticle()
+    {
+        confettiParticle.Stop();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        onClick.Invoke(this);
     }
 }

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4afcf344388da9f458649f852a7fdfbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 4978668665829076591}
   transitionAnim: {fileID: 7471448162598995352}
 --- !u!1 &7310674878300598200
 GameObject:
@@ -191,7 +192,7 @@ Canvas:
   m_GameObject: {fileID: 8722433647586676372}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -202,8 +203,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 499760367
+  m_SortingOrder: 20
   m_TargetDisplay: 0
 --- !u!114 &1858759168459361848
 MonoBehaviour:

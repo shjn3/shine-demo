@@ -51,6 +51,20 @@ public class ReuseScroller<T> : MonoBehaviour, IBeginDragHandler, IEndDragHandle
                 return false;
             }
 
+            return enable;
+        }
+    }
+
+    public bool enable
+    {
+        set
+        {
+            scrollRect.vertical = direction == ScrollerDirection.VERTICAL && value;
+            scrollRect.horizontal = direction == ScrollerDirection.HORIZONTAL && value;
+
+        }
+        get
+        {
             return true;
         }
     }
@@ -170,7 +184,7 @@ public class ReuseScroller<T> : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         if (poolItem.Count == 0)
         {
             var go = Instantiate(prefabItem);
-            go.transform.SetParent(itemsParent ? itemsParent : content.transform);
+            go.transform.SetParent(itemsParent ? itemsParent : content.transform, false);
             item = go.GetComponent<BaseReuseScrollerItem<T>>();
         }
         else

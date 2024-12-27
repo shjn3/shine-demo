@@ -25,9 +25,9 @@ public class Core : MonoBehaviour
     }
     public static void Init()
     {
+        ShineFireBase.Init();
         GameObject go = new GameObject("Sleeper");
         go.AddComponent<Sleeper>();
-
         TextAsset configAsset = Resources.Load<TextAsset>("configs/config.default");
         configs = JsonConvert.DeserializeObject<Configs>(configAsset.text);
 
@@ -36,6 +36,7 @@ public class Core : MonoBehaviour
             if (obj.Result != null) Instantiate(obj.Result);
             if (SceneManager.GetActiveScene().name == "LoadScene") SceneTransition.Transition("GameScene");
         };
+
 
         AdsManager.Init(configs.levelPlayAdsConfig);
     }
