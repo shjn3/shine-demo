@@ -10,7 +10,7 @@ public class MockBanner : MonoBehaviour
     void Awake()
     {
         canvas.worldCamera = Camera.main;
-        background.GetComponent<RectTransform>().sizeDelta = new Vector2(100, GameSceneConfig.GetBannerHeight());
+        background.GetComponent<RectTransform>().sizeDelta = new Vector2(320, GameSceneConfig.GetBannerHeight());
     }
     // Start is called before the first frame update
     void Start()
