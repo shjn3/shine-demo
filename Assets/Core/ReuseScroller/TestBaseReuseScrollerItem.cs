@@ -1,5 +1,5 @@
 using UnityEngine.UI;
-
+using Shine.Scroller;
 public class TestBaseReuseScrollerItem : BaseReuseScrollerItem<TestData>
 {
     public Text idxText;

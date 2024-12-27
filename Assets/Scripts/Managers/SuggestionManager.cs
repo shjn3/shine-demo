@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
-using ShineCore;
+using Shine.Ads;
 using UnityEngine;
+
 public struct Suggestion
 {
     public Vector3 fromWorldPosition;

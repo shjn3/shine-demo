@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Linq;
-using ShineCore;
-using Unity.VisualScripting;
+
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using Shine.Utils;
+using Shine.Promise;
 public class SceneTransition : MonoBehaviour
 {
     public static SceneTransition instance;

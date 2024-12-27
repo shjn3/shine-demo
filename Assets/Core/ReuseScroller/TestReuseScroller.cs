@@ -1,3 +1,4 @@
+using Shine.Scroller;
 public class TestData
 {
     public int idx;

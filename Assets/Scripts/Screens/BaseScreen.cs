@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
-using ShineCore;
+using Shine;
 using System;
+using Shine.Promise;
 
 public class BaseScreen : MonoBehaviour
 {

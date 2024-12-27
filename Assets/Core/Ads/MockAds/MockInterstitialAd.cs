@@ -1,19 +1,20 @@
 using System;
-using System.Diagnostics;
-
-public class MockInterstitialAd : Ads.IInterstitialAd
+namespace Shine.Ads
 {
-    //
-    public void ShowInterstitialAd(Action<bool> callback)
+    public class MockInterstitialAd : Ads.IInterstitialAd
     {
-        UnityEngine.Debug.Log("call");
-        AdsScreen screen = ScreenManager.GetScreen<AdsScreen>();
-        screen.onceClose += () =>
+        //
+        public void ShowInterstitialAd(Action<bool> callback)
         {
-            callback.Invoke(true);
-        };
-        screen.PassData("Interstitial Ad");
-        ScreenManager.OpenScreen(screen.screenName);
-        UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log("call");
+            AdsScreen screen = ScreenManager.GetScreen<AdsScreen>();
+            screen.onceClose += () =>
+            {
+                callback.Invoke(true);
+            };
+            screen.PassData("Interstitial Ad");
+            ScreenManager.OpenScreen(screen.screenName);
+            UnityEngine.Debug.Log("");
+        }
     }
 }

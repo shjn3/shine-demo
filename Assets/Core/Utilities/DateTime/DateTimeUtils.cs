@@ -1,9 +1,12 @@
 using System;
-public class DateTimeUtils
+namespace Shine.Utils
 {
-    public static bool IsToday(DateTime dataTime)
+    public class DateTimeUtils
     {
-        var now = DateTime.Now;
-        return now.Year == dataTime.Year && now.Month == dataTime.Month && now.Day == dataTime.Day;
+        public static bool IsToday(DateTime dataTime)
+        {
+            var now = DateTime.Now;
+            return now.Year == dataTime.Year && now.Month == dataTime.Month && now.Day == dataTime.Day;
+        }
     }
 }

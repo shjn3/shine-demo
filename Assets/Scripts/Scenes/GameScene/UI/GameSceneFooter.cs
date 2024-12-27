@@ -1,7 +1,7 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using Shine.Ads;
+using Shine.Utils;
 
 public class GameSceneFooter : MonoBehaviour
 {

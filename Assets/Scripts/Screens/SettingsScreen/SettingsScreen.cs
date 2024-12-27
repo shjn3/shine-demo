@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ShineCore;
+using Shine;
 using UnityEngine;
 using UnityEngine.UI;
 

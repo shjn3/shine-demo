@@ -1,4 +1,7 @@
-public class LevelPlayAdsConfig : Ads.AdsConfig
+namespace Shine.Ads
 {
+    public class LevelPlayAdsConfig : AdsConfig
+    {
 
+    }
 }

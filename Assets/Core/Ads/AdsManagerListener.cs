@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
-
-public class AdsManagerListener : MonoBehaviour
+namespace Shine.Ads
 {
-    public Action<bool> onApplicationPauseCallback = (v) => { };
-
-    void OnApplicationPause(bool isPaused)
+    public class AdsManagerListener : MonoBehaviour
     {
-        onApplicationPauseCallback.Invoke(isPaused);
+        public event Action<bool> onApplicationPauseCallback = (v) => { };
+
+        void OnApplicationPause(bool isPaused)
+        {
+            onApplicationPauseCallback.Invoke(isPaused);
+        }
     }
 }

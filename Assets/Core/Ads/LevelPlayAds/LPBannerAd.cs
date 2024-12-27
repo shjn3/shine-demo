@@ -1,90 +1,92 @@
 using System;
-using System.Diagnostics;
 using com.unity3d.mediation;
 
-public class LPBannerAd : Ads.IBannerAd
+namespace Shine.Ads
 {
-    private LevelPlayBannerAd bannerAd;
-    public Action OnLoaded = () => { };
-    public bool isEnable = false;
-
-    public LPBannerAd(string adUnitId)
+    public class LPBannerAd : Ads.IBannerAd
     {
-        bannerAd = new LevelPlayBannerAd(adUnitId);
-        bannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
-        bannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
-        bannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
-        bannerAd.OnAdDisplayFailed += BannerOnAdDisplayFailedEvent;
-        bannerAd.OnAdClicked += BannerOnAdClickedEvent;
-        bannerAd.OnAdCollapsed += BannerOnAdCollapsedEvent;
-        bannerAd.OnAdLeftApplication += BannerOnAdLeftApplicationEvent;
-        bannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
-        bannerAd.LoadAd();
-    }
+        private LevelPlayBannerAd bannerAd;
+        public Action OnLoaded = () => { };
+        public bool isEnable = false;
 
-    private void BannerOnAdExpandedEvent(LevelPlayAdInfo info)
-    {
-        UnityEngine.Debug.Log("");
-    }
+        public LPBannerAd(string adUnitId)
+        {
+            bannerAd = new LevelPlayBannerAd(adUnitId);
+            bannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
+            bannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
+            bannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
+            bannerAd.OnAdDisplayFailed += BannerOnAdDisplayFailedEvent;
+            bannerAd.OnAdClicked += BannerOnAdClickedEvent;
+            bannerAd.OnAdCollapsed += BannerOnAdCollapsedEvent;
+            bannerAd.OnAdLeftApplication += BannerOnAdLeftApplicationEvent;
+            bannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
+            bannerAd.LoadAd();
+        }
 
-    private void BannerOnAdLeftApplicationEvent(LevelPlayAdInfo info)
-    {
-        UnityEngine.Debug.Log("");
-    }
+        private void BannerOnAdExpandedEvent(LevelPlayAdInfo info)
+        {
+            UnityEngine.Debug.Log("");
+        }
 
-    private void BannerOnAdCollapsedEvent(LevelPlayAdInfo info)
-    {
-        UnityEngine.Debug.Log("");
-    }
+        private void BannerOnAdLeftApplicationEvent(LevelPlayAdInfo info)
+        {
+            UnityEngine.Debug.Log("");
+        }
 
-    private void BannerOnAdClickedEvent(LevelPlayAdInfo info)
-    {
-        UnityEngine.Debug.Log("");
-    }
+        private void BannerOnAdCollapsedEvent(LevelPlayAdInfo info)
+        {
+            UnityEngine.Debug.Log("");
+        }
 
-    private void BannerOnAdDisplayFailedEvent(LevelPlayAdDisplayInfoError error)
-    {
-        UnityEngine.Debug.Log("");
-    }
+        private void BannerOnAdClickedEvent(LevelPlayAdInfo info)
+        {
+            UnityEngine.Debug.Log("");
+        }
 
-    private void BannerOnAdDisplayedEvent(LevelPlayAdInfo info)
-    {
-        UnityEngine.Debug.Log("");
-    }
+        private void BannerOnAdDisplayFailedEvent(LevelPlayAdDisplayInfoError error)
+        {
+            UnityEngine.Debug.Log("");
+        }
 
-    private void BannerOnAdLoadFailedEvent(LevelPlayAdError error)
-    {
-        UnityEngine.Debug.LogError(error);
-    }
+        private void BannerOnAdDisplayedEvent(LevelPlayAdInfo info)
+        {
+            UnityEngine.Debug.Log("");
+        }
 
-    private void BannerOnAdLoadedEvent(LevelPlayAdInfo info)
-    {
-        isEnable = true;
-        OnLoaded.Invoke();
-        ShowBannerAd();
-        UnityEngine.Debug.Log("On Loaded");
-    }
+        private void BannerOnAdLoadFailedEvent(LevelPlayAdError error)
+        {
+            UnityEngine.Debug.LogError(error);
+        }
 
-    public void HideBannerAd()
-    {
-        if (!isEnable) return;
-        bannerAd.HideAd();
-    }
+        private void BannerOnAdLoadedEvent(LevelPlayAdInfo info)
+        {
+            isEnable = true;
+            OnLoaded.Invoke();
+            ShowBannerAd();
+            UnityEngine.Debug.Log("On Loaded");
+        }
 
-    public void ShowBannerAd()
-    {
-        if (!isEnable) return;
-        bannerAd.ShowAd();
-    }
+        public void HideBannerAd()
+        {
+            if (!isEnable) return;
+            bannerAd.HideAd();
+        }
 
-    public void DestroyBannerAd()
-    {
-        if (!isEnable) return;
-        bannerAd.DestroyAd();
-    }
+        public void ShowBannerAd()
+        {
+            if (!isEnable) return;
+            bannerAd.ShowAd();
+        }
 
-    public float GetHeight()
-    {
-        return bannerAd.GetAdSize().Height;
+        public void DestroyBannerAd()
+        {
+            if (!isEnable) return;
+            bannerAd.DestroyAd();
+        }
+
+        public float GetHeight()
+        {
+            return bannerAd.GetAdSize().Height;
+        }
     }
 }

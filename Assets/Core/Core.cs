@@ -3,41 +3,40 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
-public class Core : MonoBehaviour
+namespace Shine
 {
-    public static Core instance;
-    public static Configs configs;
-    public AdsManager adsManager;
-
-    private void Awake()
+    using Ads;
+    using FireB;
+    using Utils;
+    public class Core : MonoBehaviour
     {
-        if (instance == null)
+        public static Core instance;
+        public static Config.Config configs;
+        public AdsManager adsManager;
+
+        private void Awake()
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+
+
         }
-        else
+        public static void Init()
         {
-            Destroy(gameObject);
+            ShineFireBase.Init();
+            GameObject go = new GameObject("Sleeper");
+            go.AddComponent<Sleeper>();
+            TextAsset configAsset = Resources.Load<TextAsset>("configs/config.default");
+            configs = JsonConvert.DeserializeObject<Config.Config>(configAsset.text);
+
+            AdsManager.Init(configs.mockAdsConfig);
         }
-
-
-    }
-    public static void Init()
-    {
-        ShineFireBase.Init();
-        GameObject go = new GameObject("Sleeper");
-        go.AddComponent<Sleeper>();
-        TextAsset configAsset = Resources.Load<TextAsset>("configs/config.default");
-        configs = JsonConvert.DeserializeObject<Configs>(configAsset.text);
-
-        Addressables.LoadAssetAsync<GameObject>("ShineCore").Completed += (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj) =>
-        {
-            if (obj.Result != null) Instantiate(obj.Result);
-            if (SceneManager.GetActiveScene().name == "LoadScene") SceneTransition.Transition("GameScene");
-        };
-
-
-        AdsManager.Init(configs.mockAdsConfig);
     }
 }

@@ -1,6 +1,8 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Shine.Sound;
+
 public class SettingsPopup : Popup
 {
     public CanvasGroup canvasGroup;

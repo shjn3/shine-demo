@@ -1,60 +1,62 @@
 using UnityEngine;
-
-public class BaseReuseScrollerItem<T> : MonoBehaviour
+namespace Shine.Scroller
 {
-    public int idx;
-    public T data;
-    public RectTransform rect;
+    public class BaseReuseScrollerItem<T> : MonoBehaviour
+    {
+        public int idx;
+        public T data;
+        public RectTransform rect;
 
-    public float Top
-    {
-        get
+        public float Top
         {
-            return rect.offsetMax.y;
+            get
+            {
+                return rect.offsetMax.y;
+            }
         }
-    }
 
-    public float Bottom
-    {
-        get
+        public float Bottom
         {
-            return rect.offsetMin.y;
+            get
+            {
+                return rect.offsetMin.y;
+            }
         }
-    }
-    public float AnchoredPositionY
-    {
-        set
+        public float AnchoredPositionY
         {
-            Vector3 anchoredPosition3D = rect.anchoredPosition3D;
-            anchoredPosition3D.y = value;
-            rect.anchoredPosition3D = anchoredPosition3D;
+            set
+            {
+                Vector3 anchoredPosition3D = rect.anchoredPosition3D;
+                anchoredPosition3D.y = value;
+                rect.anchoredPosition3D = anchoredPosition3D;
+            }
         }
-    }
 
-    public float AnchoredPositionX
-    {
-        set
+        public float AnchoredPositionX
         {
-            Vector3 anchoredPosition3D = rect.anchoredPosition3D;
-            anchoredPosition3D.x = value;
-            rect.anchoredPosition3D = anchoredPosition3D;
+            set
+            {
+                Vector3 anchoredPosition3D = rect.anchoredPosition3D;
+                anchoredPosition3D.x = value;
+                rect.anchoredPosition3D = anchoredPosition3D;
+            }
         }
-    }
-    public Vector3 AnchoredPosition
-    {
-        set
+        public Vector3 AnchoredPosition
         {
-            rect.anchoredPosition3D = value;
+            set
+            {
+                rect.anchoredPosition3D = value;
+            }
         }
-    }
 
-    void Awake()
-    {
-        rect = GetComponent<RectTransform>();
-    }
+        void Awake()
+        {
+            rect = GetComponent<RectTransform>();
+        }
 
-    public virtual void UpdateData(T data)
-    {
-        this.data = data;
+        public virtual void UpdateData(T data)
+        {
+            this.data = data;
+        }
     }
 }

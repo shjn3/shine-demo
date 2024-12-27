@@ -1,58 +1,59 @@
-using System.Collections.Generic;
 using Firebase;
 using Firebase.Extensions;
 using Firebase.RemoteConfig;
-using UnityEngine.Video;
 
-public class ShineFireBase
+namespace Shine.FireB
 {
-    private static ShineFireBase instance;
-    private FirebaseApp app;
-    public bool enable = false;
-    private ShineFireBaseRemoteConfig remoteConfig;
-
-    public static void Init()
+    public class ShineFireBase
     {
-        instance = new ShineFireBase()
+        private static ShineFireBase instance;
+        private FirebaseApp app;
+        public bool enable = false;
+        private ShineFireBaseRemoteConfig remoteConfig;
+
+        public static void Init()
         {
-            remoteConfig = new ShineFireBaseRemoteConfig()
-        };
+            instance = new ShineFireBase()
+            {
+                remoteConfig = new ShineFireBaseRemoteConfig()
+            };
 
 
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-           {
-               var dependencyStatus = task.Result;
-               if (dependencyStatus == DependencyStatus.Available)
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
                {
-                   instance.app = FirebaseApp.DefaultInstance;
-                   instance.InitializeFirebase();
-                   UnityEngine.Debug.Log("Init firebase success!");
-               }
-               else
-               {
-                   UnityEngine.Debug.LogError(System.String.Format(
-                     "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-               }
-           });
-    }
+                   var dependencyStatus = task.Result;
+                   if (dependencyStatus == DependencyStatus.Available)
+                   {
+                       instance.app = FirebaseApp.DefaultInstance;
+                       instance.InitializeFirebase();
+                       UnityEngine.Debug.Log("Init firebase success!");
+                   }
+                   else
+                   {
+                       UnityEngine.Debug.LogError(System.String.Format(
+                         "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+                   }
+               });
+        }
 
-    void InitializeFirebase()
-    {
-        remoteConfig.Init();
-    }
+        void InitializeFirebase()
+        {
+            remoteConfig.Init();
+        }
 
-    public void OnDestroy()
-    {
-        remoteConfig?.DisableAutoFetch();
-    }
+        public void OnDestroy()
+        {
+            remoteConfig?.DisableAutoFetch();
+        }
 
-    public void OnStart()
-    {
-        //
-    }
+        public void OnStart()
+        {
+            //
+        }
 
-    public ConfigValue GetRemoteConfigValue(string key)
-    {
-        return remoteConfig.GetValue(key);
+        public ConfigValue GetRemoteConfigValue(string key)
+        {
+            return remoteConfig.GetValue(key);
+        }
     }
 }

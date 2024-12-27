@@ -1,4 +1,4 @@
-public abstract partial class Ads
+namespace Shine.Ads
 {
     public class AdsConfig
     {

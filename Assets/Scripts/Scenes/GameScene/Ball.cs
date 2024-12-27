@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
-using ShineCore;
+using Shine.Promise;
+using Shine.Sound;
 
 public class Ball : MonoBehaviour
 {
@@ -12,7 +11,7 @@ public class Ball : MonoBehaviour
     public Tube tube;
     public int idx = 0;
     public string color = "";
-    public float dropDownSpeed = 0.36f;
+    public float dropDownSpeed = 0.20f;
     public float flySpeed = 1f;
     public Tween highlightTween;
     public Tween unHighlightTween;

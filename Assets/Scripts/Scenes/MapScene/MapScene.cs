@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using ShineCore;
 using UnityEngine;
+using Shine.Promise;
 
 public class MapScene : MonoBehaviour
 {

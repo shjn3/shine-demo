@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using ShineCore;
+using Shine;
 using UnityEngine;
 
 public class ScreenKey

@@ -1,17 +1,18 @@
 using System;
-using System.Diagnostics;
-
-public class MockRewardedAd : Ads.IRewardedAd
+namespace Shine.Ads
 {
-    public void ShowRewardedAd(Action<bool> callback)
+    public class MockRewardedAd : Ads.IRewardedAd
     {
-        AdsScreen screen = ScreenManager.GetScreen<AdsScreen>();
-        screen.onceClose += () =>
+        public void ShowRewardedAd(Action<bool> callback)
         {
-            callback.Invoke(true);
-        };
-        screen.PassData("Rewarded Ad");
-        ScreenManager.OpenScreen(screen.screenName);
-        UnityEngine.Debug.Log("");
+            AdsScreen screen = ScreenManager.GetScreen<AdsScreen>();
+            screen.onceClose += () =>
+            {
+                callback.Invoke(true);
+            };
+            screen.PassData("Rewarded Ad");
+            ScreenManager.OpenScreen(screen.screenName);
+            UnityEngine.Debug.Log("");
+        }
     }
 }

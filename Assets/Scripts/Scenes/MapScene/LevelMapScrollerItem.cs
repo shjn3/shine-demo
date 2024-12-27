@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Shine.Scroller;
 
 public class LevelMapScrollerItemData
 {

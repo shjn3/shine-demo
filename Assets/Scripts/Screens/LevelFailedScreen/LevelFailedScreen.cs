@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using ShineCore;
 using UnityEngine;
 using UnityEngine.UI;
+using Shine.Promise;
+using Shine.Sound;
+using Shine.Utils;
 
 public class LevelFailedScreen : BaseScreen
 {

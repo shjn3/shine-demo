@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using ShineCore;
-using UnityEngine;
 using UnityEngine.UI;
+using Shine.Promise;
 
 public class AdsScreen : BaseScreen
 {

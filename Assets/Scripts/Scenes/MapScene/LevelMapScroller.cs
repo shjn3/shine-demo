@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Shine;
+using Shine.Scroller;
 
 public class LevelMapScroller : ReuseScroller<LevelMapScrollerItemData>
 {

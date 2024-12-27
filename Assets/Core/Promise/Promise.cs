@@ -1,6 +1,5 @@
 using System;
-
-namespace ShineCore
+namespace Shine.Promise
 {
     public class Promise
     {

@@ -1,8 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using Shine.Ads;
 public class GameSceneHeader : MonoBehaviour
 {
     public GameScene gameScene;
