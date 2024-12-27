@@ -10,10 +10,13 @@ public class Tube : MonoBehaviour
 {
     private Stack<Ball> ballStack = new();
     public BoxCollider2D boxCollider2D;
-    public bool isSelected = false;
+    [SerializeField]
+    private ParticleSystem confettiParticle;
+    [HideInInspector]
     public int idx;
     [SerializeField]
     private GameObject ballPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -131,7 +134,6 @@ public class Tube : MonoBehaviour
         Vector3 to = GetTopPosition();
         Ball ball = ballStack.Peek();
         ball.MoveTo(to, 0.3f * CalculateDuration(ball.idx));
-        isSelected = true;
         SoundManager.Play(SoundKey.HIGHLIGHT);
         Debug.Log("Select " + ballStack.Count);
     }
@@ -146,7 +148,6 @@ public class Tube : MonoBehaviour
         Vector3 to = new(0, GetBallPositionY(ballStack.Count - 1), 0);
         Ball ball = ballStack.Peek();
         ball.Drop(to, CalculateDuration(ball.idx));
-        isSelected = false;
         Debug.Log("Un Select " + ballStack.Count);
     }
 
@@ -199,6 +200,7 @@ public class Tube : MonoBehaviour
     {
         return transform.TransformPoint(new Vector3(0, GetBallPositionY(Math.Max(0, ballStack.Count - 1)), 0));
     }
+
     public string[] GetColors()
     {
         List<string> colors = new();
@@ -209,5 +211,15 @@ public class Tube : MonoBehaviour
         }
 
         return colors.ToArray();
+    }
+
+    public void RunConfettiParticle()
+    {
+        this.confettiParticle.Play();
+    }
+
+    public void StopConfettiParticle()
+    {
+        confettiParticle.Stop();
     }
 }

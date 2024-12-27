@@ -360,8 +360,6 @@ MonoBehaviour:
   addTubeButton: {fileID: 8759236659926316150}
   undoButton: {fileID: 1964114660161437924}
   hintButton: {fileID: 367949296221584271}
-  hintButtonCountText: {fileID: 0}
-  undoButtonCountText: {fileID: 0}
 --- !u!1001 &476319052305378954
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,6 +44,9 @@ TagManager:
   - name: Tube
     uniqueID: 752382357
     locked: 0
+  - name: Effect
+    uniqueID: 150761223
+    locked: 0
   - name: BallOutsideTube
     uniqueID: 3411337735
     locked: 0
@@ -55,7 +58,4 @@ TagManager:
     locked: 0
   - name: MockAds
     uniqueID: 3424712537
-    locked: 0
-  - name: New Layer 6
-    uniqueID: 150761223
     locked: 0
