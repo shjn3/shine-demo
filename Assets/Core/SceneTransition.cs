@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Shine.Utils;
 using Shine.Promise;
+using System;
 public class SceneTransition : MonoBehaviour
 {
+    public static event Action onLoadedScene = () => { };
     public static SceneTransition instance;
     [SerializeField]
     private Canvas canvas;
@@ -19,6 +21,7 @@ public class SceneTransition : MonoBehaviour
         {
             Destroy(instance);
         }
+        canvas.worldCamera = Camera.main;
     }
 
     [SerializeField]
@@ -34,13 +37,20 @@ public class SceneTransition : MonoBehaviour
             instance.transitionAnim.Play("FadeIn");
             Sleeper.WaitForSeconds(0.15f).Then(() =>
             {
-                SceneManager.LoadScene(sceneName);
-                instance.transitionAnim.Play("FadeOut");
-
-                Sleeper.WaitForSeconds(0.15f).Then(() =>
+                AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+                operation.completed += (AsyncOperation) =>
                 {
-                    resolve();
-                });
+                    if (operation.isDone)
+                    {
+                        onLoadedScene.Invoke();
+                        instance.canvas.worldCamera = Camera.main;
+                        instance.transitionAnim.Play("FadeOut");
+                        Sleeper.WaitForSeconds(0.15f).Then(() =>
+                        {
+                            resolve();
+                        });
+                    }
+                };
             });
         });
     }

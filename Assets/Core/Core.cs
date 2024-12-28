@@ -35,8 +35,8 @@ namespace Shine
             go.AddComponent<Sleeper>();
             TextAsset configAsset = Resources.Load<TextAsset>("configs/config.default");
             configs = JsonConvert.DeserializeObject<Config.Config>(configAsset.text);
-
             AdsManager.Init(configs.mockAdsConfig);
+            FPSManager.Init();
         }
     }
 }

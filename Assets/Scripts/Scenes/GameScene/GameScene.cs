@@ -17,6 +17,8 @@ public class GameScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
         gameManager.UpdateRatioScale(GameSceneConfig.HEIGHT / 2 - header.GetHeight(), GameSceneConfig.HEIGHT / 2 - footer.GetHeight());
 
     }

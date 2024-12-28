@@ -33,9 +33,13 @@ public class GamePlay : MonoBehaviour
         Pause = 2
     }
 
+    public Transform ballsParentTransform;
+    public Transform tubesParentTransform;
+
     public GameObject tubePrefab;
     public GameObject ballPrefab;
     public GameManager gameManager;
+    [HideInInspector]
     public List<Tube> tubes = null;
 
     private Tube selectedTube;
@@ -129,6 +133,11 @@ public class GamePlay : MonoBehaviour
 
             xTop += padding + width;
             xBottom += padding + width;
+        }
+
+        for (int i = 0; i < tubes.Count; i++)
+        {
+            tubes[i].AlignBallsPosition();
         }
     }
 
@@ -235,21 +244,21 @@ public class GamePlay : MonoBehaviour
         for (int i = 0; i < ballsMove.count; i++)
         {
             var ball = balls[i];
-            Vector3 fromTopPosition = -to.transform.localPosition + from.transform.localPosition + Tube.GetTopPosition();
+            Vector3 fromTopPosition = from.transform.localPosition + Tube.GetTopPosition();
 
-            float duration = Vector3.Distance(fromTopPosition, to.transform.localPosition + Tube.GetTopPosition()) / 2f;
-            duration *= 0.001f;
-            float durationMove2 = Math.Abs((fromTopPosition.y - ball.transform.localPosition.y) / (Tube.GetTopPosition().y - Tube.GetBallPositionY(0))) * 0.1f;
+            float durationMove2 = Vector3.Distance(fromTopPosition, to.transform.localPosition + Tube.GetTopPosition()) / 2f;
+            durationMove2 *= 0.001f;
+            float durationMove1 = Math.Abs((fromTopPosition.y - ball.transform.localPosition.y) / (Tube.GetTopPosition().y - Tube.GetBallPositionY(0))) * 0.1f;
             var tempI = i;
             var promise = new Promise(resolve =>
              {
-                 ball.PlayMoveAnimation(fromTopPosition, durationMove2, delay + i * 0.02f).Then(() =>
+                 ball.PlayMoveAnimation(fromTopPosition, durationMove1, delay + i * 0.02f).Then(() =>
                  {
-                     ball.spriteRenderer.sortingLayerName = "BallOutsideTube";
-                     ball.PlayMoveAnimation(Tube.GetTopPosition(), duration).Then(() =>
+                    //  ball.spriteRenderer.sortingLayerName = "BallOutsideTube";
+                     ball.PlayMoveAnimation(Tube.GetTopPosition(ball.tube), durationMove2).Then(() =>
                      {
-                         ball.spriteRenderer.sortingLayerName = "Default";
-                         ball.PlayUnHighlightAnimation(new Vector3(0, Tube.GetBallPositionY(ball.idx), 0)).Then(() =>
+                        //  ball.spriteRenderer.sortingLayerName = "Default";
+                         ball.PlayUnHighlightAnimation(new Vector3(0, Tube.GetBallPositionY(ball.idx), 0) + ball.tube.transform.localPosition).Then(() =>
                          {
                              resolve();
                          });
@@ -515,8 +524,8 @@ public class GamePlay : MonoBehaviour
 
     Tube GenerateTube(string[] colors, int idx = -1)
     {
-        Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, gameObject.transform).GetComponent<Tube>();
-        tube.GenerateBalls(colors);
+        Tube tube = Instantiate(tubePrefab, Vector3.zero, Quaternion.identity, tubesParentTransform).GetComponent<Tube>();
+        tube.GenerateBalls(colors, ballsParentTransform);
         tube.idx = idx;
         tube.onClick += HandleTubeClicked;
         return tube;

@@ -86,7 +86,7 @@ public class Ball : MonoBehaviour
 
     public Promise PlayUnHighlightAnimation(Vector3 to)
     {
-        var fromPosition = Tube.GetTopPosition();
+        var fromPosition = Tube.GetTopPosition(tube);
         int bounceTime = BallConfig.BOUNCE_COUNT;
         bool isAllowBounce = true;
         float prevValue = fromPosition.y;

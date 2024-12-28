@@ -9,14 +9,14 @@ namespace Shine.Ads
         public MockBannerAd()
         {
 #if UNITY_EDITOR
-            var a = AssetDatabase.FindAssets("MockBanner");
-            if (a != null && a.Length > 0)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(a[0]);
-                GameObject go = (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
-                GameObject.Instantiate(go);
-                bannerImage = go.GetComponentInChildren<Image>();
-            }
+            // var a = AssetDatabase.FindAssets("MockBanner");
+            // if (a != null && a.Length > 0)
+            // {
+            //     var path = AssetDatabase.GUIDToAssetPath(a[0]);
+            //     GameObject go = (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
+            //     GameObject.Instantiate(go);
+            //     bannerImage = go.GetComponentInChildren<Image>();
+            // }
 #endif
         }
         public void DestroyBannerAd()

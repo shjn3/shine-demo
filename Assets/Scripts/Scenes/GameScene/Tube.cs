@@ -39,7 +39,6 @@ public class Tube : MonoBehaviour, IPointerClickHandler
 
         ballStack.Push(ball);
         ball.SetTube(this);
-        ball.transform.SetParent(transform);
         ball.idx = ballStack.Count - 1;
         return true;
     }
@@ -52,7 +51,7 @@ public class Tube : MonoBehaviour, IPointerClickHandler
         return ball;
     }
 
-    public void GenerateBalls(string[] colors)
+    public void GenerateBalls(string[] colors, Transform ballsParent)
     {
         if (colors == null || colors.Length == 0)
         {
@@ -61,11 +60,10 @@ public class Tube : MonoBehaviour, IPointerClickHandler
 
         foreach (var color in colors)
         {
-            GameObject ballObject = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+            GameObject ballObject = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity, ballsParent);
             ballObject.GetComponent<Ball>().SetColor(color);
             PushBall(ballObject.GetComponent<Ball>());
         }
-        AlignBallsPosition();
     }
 
     public string GetLastColor()
@@ -116,7 +114,7 @@ public class Tube : MonoBehaviour, IPointerClickHandler
         int i = 0;
         foreach (Ball ball in ballStack.Reverse())
         {
-            ball.transform.localPosition = new Vector3(0, GetBallPositionY(i), 0);
+            ball.transform.localPosition = new Vector3(0, GetBallPositionY(i), 0) + transform.localPosition;
             i++;
         }
     }
@@ -131,6 +129,11 @@ public class Tube : MonoBehaviour, IPointerClickHandler
         return new(0, TubeConfig.HEIGHT / 2 + TubeConfig.TOP_HEIGHT + BallConfig.HEIGHT / 2, 0);
     }
 
+    public static Vector3 GetTopPosition(Tube tube)
+    {
+        return new Vector3(0, TubeConfig.HEIGHT / 2 + TubeConfig.TOP_HEIGHT + BallConfig.HEIGHT / 2, 0) + tube.transform.localPosition;
+    }
+
     public void Select()
     {
         if (IsEmpty())
@@ -142,7 +145,7 @@ public class Tube : MonoBehaviour, IPointerClickHandler
 
         foreach (var ball in balls)
         {
-            ball.PlayHighlightAnimation(to);
+            ball.PlayHighlightAnimation(to + transform.localPosition);
             to.y -= BallConfig.HEIGHT;
         }
 
@@ -160,7 +163,7 @@ public class Tube : MonoBehaviour, IPointerClickHandler
         Ball[] balls = GetLastBalls();
         foreach (var ball in balls)
         {
-            Vector3 to = new(0, GetBallPositionY(ball.idx), 0);
+            Vector3 to = new Vector3(0, GetBallPositionY(ball.idx), 0) + transform.localPosition;
             ball.PlayUnHighlightAnimation(to);
         }
     }
