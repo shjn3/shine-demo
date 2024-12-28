@@ -254,10 +254,10 @@ public class GamePlay : MonoBehaviour
              {
                  ball.PlayMoveAnimation(fromTopPosition, durationMove1, delay + i * 0.02f).Then(() =>
                  {
-                    //  ball.spriteRenderer.sortingLayerName = "BallOutsideTube";
+                     ball.spriteRenderer.sortingLayerName = "BallOutsideTube";
                      ball.PlayMoveAnimation(Tube.GetTopPosition(ball.tube), durationMove2).Then(() =>
                      {
-                        //  ball.spriteRenderer.sortingLayerName = "Default";
+                         ball.spriteRenderer.sortingLayerName = "Default";
                          ball.PlayUnHighlightAnimation(new Vector3(0, Tube.GetBallPositionY(ball.idx), 0) + ball.tube.transform.localPosition).Then(() =>
                          {
                              resolve();
