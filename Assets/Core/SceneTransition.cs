@@ -35,7 +35,7 @@ public class SceneTransition : MonoBehaviour
         return new Promise(resolve =>
         {
             instance.transitionAnim.Play("FadeIn");
-            Sleeper.WaitForSeconds(0.15f).Then(() =>
+            Sleeper.WaitForSeconds(0.2f).Then(() =>
             {
                 AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
                 operation.completed += (AsyncOperation) =>
