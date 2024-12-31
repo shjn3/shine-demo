@@ -1,0 +1,31 @@
+{
+    "levelPlayAdsConfig":{
+        "appKey":"206ab341d",
+        "androidAdsUnit":{
+            "banner":"c6o25x9dv0nwwd4p",
+            "interstitial": "08eggqqweoaoaiyu",
+            "rewarded": "0y7s9v4j64vlni02"
+        },
+        " iosAdsUnit":{
+            "banner":"c6o25x9dv0nwwd4p",
+            "interstitial": "08eggqqweoaoaiyu",
+            "rewarded": "0y7s9v4j64vlni02"
+        }
+    },
+    "mockAdsConfig":{
+        "appKey":"206ab341d",
+        "androidAdsUnit":{
+            "banner":"c6o25x9dv0nwwd4p",
+            "interstitial": "08eggqqweoaoaiyu",
+            "rewarded": "0y7s9v4j64vlni02"
+        },
+        " iosAdsUnit":{
+            "banner":"c6o25x9dv0nwwd4p",
+            "interstitial": "08eggqqweoaoaiyu",
+            "rewarded": "0y7s9v4j64vlni02"
+        }
+    },
+    "levelMax":300,
+    "hintCount":5,
+    "undoCount":5
+}
